@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="<%- blog.language %>">
+
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+  <title>Authorization Request</title>
+</head>
+
+<body>
+  <header>
+    <h1>Authorization Request</h1>
+  </header>
+  <content>
+    <% if(blog.user.profile_photo) { %>
+      <img class="u-photo avatar" src="<%- blog.url %>/<%- blog.user.profile_photo %>" width="65" height="65" />
+      <% } else { %>
+        <img class="u-photo avatar" src="<%- blog.user.profile_photo_gravatar %>" width="65" height="65" />
+        <% } %>
+          <h2><strong><a target="_blank" href="<%- client_id %>"><%- client_id %></a></strong><br /> wants to access your <strong><%- blog.user.username %></strong> account.</h2>
+          <span class="u-clear"></span>
+          <p>This will allow
+            <a target="_blank" href="<%- client_id %>">
+              <%- client_id %>
+            </a> access to:</p>
+          <ul>
+            <% scope.split(" ").forEach(function(scope) { %>
+              <li><strong><%- scope %></strong></li>
+              <% }); %>
+          </ul>
+          <h4>Make sure you trust
+            <%- client_id %>
+          </h4>
+
+          <p>You will be redirected to
+            <a href="<%- redirect_uri %>">
+              <%- redirect_uri %>
+            </a> after authorizing this application.</p>
+
+          <p>
+            <a href="/indieAuth/approve">Allow</a> |
+            <a href="<%- redirect_uri %>?error=access_denied" class="text-danger">Cancel</a>
+          </p>
+
+  </content>
+</body>
+
+</html>

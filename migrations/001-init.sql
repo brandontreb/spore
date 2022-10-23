@@ -1,0 +1,37 @@
+-- Up
+CREATE TABLE `oAuth2Requests` (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,  
+  userId INTEGER NOT NULL,
+  blogId INTEGER NOT NULL,
+  state TEXT NOT NULL,
+  clientId TEXT NOT NULL,
+  responseType TEXT,
+  redirectUri TEXT NOT NULL,
+  scope TEXT NOT NULL,
+  code TEXT NOT NULL,  
+  codeChallenge TEXT,
+  codeChallengeMethod TEXT,
+  grantType TEXT,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE `media` (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  blogId INTEGER NOT NULL,  
+  postId INTEGER,
+  type TEXT NOT NULL,
+  mimeType,
+  path TEXT,  
+  url TEXTL,
+  size INTEGER,
+  originalFileName TEXT,
+  filename TEXT,
+  altText TEXT,
+  createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Down
+DROP TABLE IF EXISTS `oAuth2Requests`;
+DROP TABLE IF EXISTS `media`;
