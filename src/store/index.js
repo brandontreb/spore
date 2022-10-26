@@ -67,7 +67,42 @@ const SporeStore = class SporeStore extends ISporeStore {
 
   async savePost(post) {
     logger.debug('Saving post to the database: %j', post);
-    return { id: 1 };
+
+    let categories = post.categories;
+    delete post.categories;
+    delete post.media;
+    DB().insert('posts', post);
+    let postObj = DB().queryFirstRow('SELECT * FROM posts ORDER BY id DESC LIMIT 1');
+
+    logger.debug('Saving categories: %j', post.categories);
+    const date = new Date();
+    const sqllite_date = date.toISOString();
+    const stmt = DB().prepare('INSERT OR IGNORE INTO categories VALUES (@id, @blogId, @name, @slug, @createdAt, @updatedAt)');
+    for (let category of categories) {
+      stmt.run({ id: null, blogId: category.blogId, name: category.name, slug: category.slug, createdAt: sqllite_date, updatedAt: sqllite_date });
+    }
+    logger.debug('Saving post to categories: %d %j', post.id, post.categories);
+    const stmt2 = DB().prepare('INSERT OR IGNORE INTO post_categories VALUES (@id, @postId, @blogId, @categoryId, @createdAt, @updatedAt)');
+    for (let category of categories) {
+      let row = DB().queryFirstRow('SELECT * FROM categories WHERE blogId = ? AND slug = ?', category.blogId, category.slug);
+      if (row) {
+        console.log(row);
+        console.log({ id: null, blogId: postObj.blogId, postId: postObj.id, categoryId: row.id, createdAt: sqllite_date, updatedAt: sqllite_date })
+        stmt2.run({ id: null, blogId: postObj.blogId, postId: postObj.id, categoryId: row.id, createdAt: sqllite_date, updatedAt: sqllite_date });
+      }
+    }
+
+
+    return postObj;
+  }
+
+  getPostByPermalink = async(permalink) => {
+    logger.debug('Getting post from the database: %s', permalink);
+    let row = DB().queryFirstRow('SELECT * FROM posts WHERE permalink = ?', permalink);
+    if (row) {
+      return row;
+    }
+    return null;
   }
 }
 

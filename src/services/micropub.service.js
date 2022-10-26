@@ -1,8 +1,19 @@
 const { decode } = require('html-entities');
+const { NodeHtmlMarkdown } = require('node-html-markdown');
+const { markdownToTxt } = require('markdown-to-txt');
+const MarkdownIt = require('markdown-it');
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true
+});
+const { convert } = require('html-to-text');
 
 const processMicropubDocument = (micropubDocument) => {
-  let title = '';
-  let content = '';
+  let name = '';
+  let content_text = '';
+  let content_md = '';
+  let content_html = '';
   let status = 'published'
   let categories = [];
   let slug = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -10,24 +21,41 @@ const processMicropubDocument = (micropubDocument) => {
 
   // Title
   if (micropubDocument.properties.name) {
-    title = micropubDocument.properties.name[0];
+    name = micropubDocument.properties.name[0];
   }
 
   // Content
   if (micropubDocument.properties.content) {
     let c = [].concat(micropubDocument.properties.content);
+    let content = c;
     if (Array.isArray(c)) {
       content = c[0];
     } else {
-      content = c;
+      content_text = c;
     }
-    if (content.html) {
-      content = content.html;
+    if (typeof content === 'string') {
+      content_text = content;
+      content_md = content_text;
+      content_html = md.render(content_md);
+    } else if (typeof content === 'object') {
+      if (content.html) {
+        content_html = content.html;
+        content_md = NodeHtmlMarkdown.translate(content_html);
+        convert(content_html, {
+          wordwrap: 130
+        });
+      }
+
+      if (content.value) {
+        content_text = content.value;
+        content_md = content.value;
+        content_html = md.render(content_md);
+      }
     }
-    if (content.value) {
-      content = content.value;
-    }
-    content = decode(decodeURIComponent(content));
+
+    content_text = decode(decodeURIComponent(content_text));
+    content_md = decode(decodeURIComponent(content_md));
+    content_html = decode(decodeURIComponent(content_html));
   }
 
   // Status
@@ -42,17 +70,20 @@ const processMicropubDocument = (micropubDocument) => {
     categories = micropubDocument.properties.category;
   }
 
-  // Slug
-  if (micropubDocument.properties['mp-slug'] &&
-    micropubDocument.properties['mp-slug'].length) {
-    slug = micropubDocument.properties['mp-slug'][0];
+  // Slug  
+  if (micropubDocument.mp &&
+    micropubDocument.mp.slug &&
+    micropubDocument.mp.slug.length) {
+    slug = micropubDocument.mp.slug[0];
   }
 
   type = getPostTypeFromBody(micropubDocument.properties);
 
   let post = {
-    title,
-    content,
+    name,
+    content_html,
+    content_md,
+    content_text,
     status,
     categories,
     slug,

@@ -5,6 +5,7 @@ const ApiError = require('../utils/ApiError');
 const logger = require('../config/logger');
 const { micropubService } = require('../services');
 const SporeStore = require('../store');
+const { slugify } = require('../utils/utils');
 
 const create = catchAsync(async(req, res, next) => {
   let { body, query } = req;
@@ -33,8 +34,28 @@ const create = catchAsync(async(req, res, next) => {
       body = micropubService.processFormEncodedBody(req.body);
     }
   }
+  logger.info('Micropub request: %j', body);
+
   let post = micropubService.processMicropubDocument(body);
-  let postObj = await SporeStore.savePost({...post, raw });
+
+  // TODO: Check if published in future and update the slug
+  post.blogId = blog.id;
+  let now = new Date();
+  const date = now.toISOString().split('T')[0].replaceAll('-', '/');
+  post.permalink = `/${date}/${post.slug}`;
+
+  // handle categories
+  if (post.categories && post.categories.length) {
+    post.categories = post.categories.map((category) => {
+      return {
+        blogId: blog.id,
+        name: category,
+        slug: slugify(category)
+      };
+    });
+  }
+
+  let postObj = await SporeStore.savePost({...post, _raw: raw });
 
   // Enumerate the post photos
   if (post.media && post.media.photo && post.media.photo.length > 0) {
@@ -56,11 +77,7 @@ const create = catchAsync(async(req, res, next) => {
     }
   }
 
-  // TODO: Save post to db
-  // TODO: Redirect to post url (with slug)
-  res.set('Location', `${blog.url}/posts/${postObj.id}`);
-
-  // return res.status(httpStatus.OK).send('OK');
+  res.set('Location', `${blog.url}${postObj.permalink}`).status(httpStatus.CREATED).send();
 });
 
 // Create and endpoint called media that allows uploads
