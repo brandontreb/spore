@@ -45,7 +45,6 @@ const approve = async(req, res) => {
 
   let indieAuthRequestBody = {
     userId: blog.user.id,
-    blogId: blog.id,
     clientId: req.session.indieAuth.client_id,
     redirectUri: redirect_uri,
     scope: req.session.indieAuth.scope,

@@ -79,6 +79,9 @@ const processMicropubDocument = (micropubDocument) => {
 
   type = getPostTypeFromBody(micropubDocument.properties);
 
+  // Meta
+  meta = getPostMetaFromProperties(micropubDocument.properties);
+
   let post = {
     name,
     content_html,
@@ -88,13 +91,14 @@ const processMicropubDocument = (micropubDocument) => {
     categories,
     slug,
     type,
+    meta
   }
 
   // Handle any media
-  let media = {};
-  if (micropubDocument.properties.photo) {
-    media.photo = micropubDocument.properties.photo;
-  }
+  console.log(micropubDocument);
+  let media = {
+    photo: micropubDocument.properties.photo,
+  };
   post.media = media;
 
   return post;
@@ -132,6 +136,25 @@ const getPostTypeFromBody = (postBody) => {
   }
 
   return type;
+}
+
+const reservedMetaProperties = [
+  'name',
+  'content',
+  'post-status',
+  'category',
+  'slug',
+  'photo'
+];
+
+const getPostMetaFromProperties = (properties) => {
+  let meta = Object.assign({}, properties);
+  // Filter out any reserved properties
+  reservedMetaProperties.forEach((property) => {
+    delete meta[property];
+  });
+
+  return meta;
 }
 
 const reservedProperties = Object.freeze([
@@ -258,4 +281,5 @@ module.exports = {
   processJsonEncodedBody,
   processFormEncodedBody,
   processMicropubDocument,
+
 };

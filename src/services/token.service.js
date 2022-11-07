@@ -47,7 +47,7 @@ const generateIndieAuthTokens = async(
   scope = scope || 'profile';
   client_id = client_id || 'unknown';
   const user_id = blog.user.id;
-  const blog_id = blog.id;
+
   const accessTokenExpires = moment().add(100000, 'minutes');
 
   // Save access token
@@ -56,7 +56,6 @@ const generateIndieAuthTokens = async(
     scope,
     client_id,
     user_id,
-    blog_id,
     expires_at: accessTokenExpires.toDate(),
     type: tokenTypes.ACCESS
   };

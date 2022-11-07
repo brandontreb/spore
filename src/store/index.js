@@ -2,6 +2,8 @@ const DB = require('better-sqlite3-helper');
 const logger = require('../config/logger');
 const ISporeStore = require('./interface');
 
+const { slugify } = require('../utils/utils');
+
 const SporeStore = class SporeStore extends ISporeStore {
   constructor() {
     super();
@@ -68,30 +70,93 @@ const SporeStore = class SporeStore extends ISporeStore {
   async savePost(post) {
     logger.debug('Saving post to the database: %j', post);
 
+    // handle categories
+    if (post.categories && post.categories.length) {
+      post.categories = post.categories.map((category) => {
+        return {
+          name: category,
+          slug: slugify(category)
+        };
+      });
+    }
+
     let categories = post.categories;
     delete post.categories;
+    let media = post.media;
     delete post.media;
+    let meta = post.meta;
+    delete post.meta;
+
     DB().insert('posts', post);
     let postObj = DB().queryFirstRow('SELECT * FROM posts ORDER BY id DESC LIMIT 1');
 
     logger.debug('Saving categories: %j', post.categories);
     const date = new Date();
     const sqllite_date = date.toISOString();
-    const stmt = DB().prepare('INSERT OR IGNORE INTO categories VALUES (@id, @blogId, @name, @slug, @createdAt, @updatedAt)');
+    const stmt = DB().prepare('INSERT OR IGNORE INTO categories VALUES (@id, @name, @slug, @createdAt, @updatedAt)');
     for (let category of categories) {
-      stmt.run({ id: null, blogId: category.blogId, name: category.name, slug: category.slug, createdAt: sqllite_date, updatedAt: sqllite_date });
+      stmt.run({ id: null, name: category.name, slug: category.slug, createdAt: sqllite_date, updatedAt: sqllite_date });
     }
     logger.debug('Saving post to categories: %d %j', post.id, post.categories);
-    const stmt2 = DB().prepare('INSERT OR IGNORE INTO post_categories VALUES (@id, @postId, @blogId, @categoryId, @createdAt, @updatedAt)');
+    const stmt2 = DB().prepare('INSERT OR IGNORE INTO post_categories VALUES (@id, @postId, @categoryId, @createdAt, @updatedAt)');
     for (let category of categories) {
-      let row = DB().queryFirstRow('SELECT * FROM categories WHERE blogId = ? AND slug = ?', category.blogId, category.slug);
+      let row = DB().queryFirstRow('SELECT * FROM categories WHERE slug = ?', category.slug);
       if (row) {
-        console.log(row);
-        console.log({ id: null, blogId: postObj.blogId, postId: postObj.id, categoryId: row.id, createdAt: sqllite_date, updatedAt: sqllite_date })
-        stmt2.run({ id: null, blogId: postObj.blogId, postId: postObj.id, categoryId: row.id, createdAt: sqllite_date, updatedAt: sqllite_date });
+        stmt2.run({ id: null, postId: postObj.id, categoryId: row.id, createdAt: sqllite_date, updatedAt: sqllite_date });
       }
     }
 
+    // enumerate the meta properties
+    if (meta) {
+      for (let key in meta) {
+        if (meta.hasOwnProperty(key)) {
+          let value = meta[key];
+          if (typeof value === 'object') {
+            // Single item arrays get squashed
+            // Multi item arrays get stored as CSV
+            if (Array.isArray(value)) {
+              if (value.length > 1) {
+                value = JSON.stringify(value);
+              } else {
+                value = value[0];
+              }
+            } else {
+              // Objects are stored as JSON
+              value = JSON.stringify(value);
+            }
+          }
+          if (key && value) {
+            DB().insert('post_meta', {
+              postId: postObj.id,
+              key: key,
+              value: value
+            });
+          }
+        }
+      }
+    }
+
+    // Enumerate the post photos
+    if (media && media.photo && media.photo.length > 0) {
+      for (let photo of media.photo) {
+        let altText = '';
+        if (typeof photo === 'object') {
+          if (photo.alt) {
+            altText = photo.alt;
+          }
+          photo = photo.value;
+        } else {
+          continue;
+        }
+        let filename = photo.split('/').pop();
+        let media = await this.getMediaByFilename(filename);
+        if (media) {
+          await this.updateMedia({...media, postId: postObj.id, altText: altText });
+        } else {
+          await this.saveMedia({ postId: postObj.id, altText: altText, url: photo, type: 'photo' });
+        }
+      }
+    }
 
     return postObj;
   }

@@ -5,7 +5,6 @@ const ApiError = require('../utils/ApiError');
 const logger = require('../config/logger');
 const { micropubService } = require('../services');
 const SporeStore = require('../store');
-const { slugify } = require('../utils/utils');
 
 const create = catchAsync(async(req, res, next) => {
   let { body, query } = req;
@@ -26,6 +25,8 @@ const create = catchAsync(async(req, res, next) => {
 
   let raw = JSON.stringify(body);
 
+  logger.info('raw body: %j', body);
+
   // Check the body type and process accordingly
   if (body) {
     if (req.is('json')) {
@@ -38,44 +39,12 @@ const create = catchAsync(async(req, res, next) => {
 
   let post = micropubService.processMicropubDocument(body);
 
-  // TODO: Check if published in future and update the slug
-  post.blogId = blog.id;
+  // TODO: Check if published in future and update the slug  
   let now = new Date();
   const date = now.toISOString().split('T')[0].replaceAll('-', '/');
   post.permalink = `/${date}/${post.slug}`;
 
-  // handle categories
-  if (post.categories && post.categories.length) {
-    post.categories = post.categories.map((category) => {
-      return {
-        blogId: blog.id,
-        name: category,
-        slug: slugify(category)
-      };
-    });
-  }
-
   let postObj = await SporeStore.savePost({...post, _raw: raw });
-
-  // Enumerate the post photos
-  if (post.media && post.media.photo && post.media.photo.length > 0) {
-    for (let photo of post.media.photo) {
-      let altText = '';
-      if (typeof photo === 'object') {
-        if (photo.alt) {
-          altText = photo.alt;
-        }
-        photo = photo.value;
-      } else {
-        continue;
-      }
-      let filename = photo.split('/').pop();
-      let media = await SporeStore.getMediaByFilename(filename);
-      if (media) {
-        await SporeStore.updateMedia({...media, postId: postObj.id, altText: altText });
-      }
-    }
-  }
 
   res.set('Location', `${blog.url}${postObj.permalink}`).status(httpStatus.CREATED).send();
 });
@@ -91,7 +60,6 @@ const media = catchAsync(async(req, res, next) => {
   let response = [];
   for (let file of req.files.file) {
     let mediaBody = {
-      blogId: blog.id,
       type: 'image', // TODO: Hardcoded for now, update when more media supported
       originalFilename: file.originalname,
       path: file.path,
