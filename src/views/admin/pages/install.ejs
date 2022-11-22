@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+
+  <header>
+    <a class="title" href="/">
+      <h1>
+        <span class="title-spore">🌱</span> spore.blog |
+        <%- admin_title %>
+      </h1>
+    </a>
+    <!-- Show flash messages-->
+    <% if(flash.length > 0) { %>
+      <% flash.forEach(function(message) { %>
+        <p class="flash-message <%- message.type %> ">
+          <%= message.message %>
+        </p>
+        <% }); %>
+          <% } %>
+  </header>
+  <main>
+    <content>
+      <form action="/admin/install" method="post">
+        <p>
+          <label for="title">Blog title</label>
+          <input type="text" class="form-control" id="blog_title" name="blog_title" placeholder="Blog Title" value="<%- locals.blog_title %>" required>
+        </p>
+        <p>
+          <label for="title">Blog URL</label>
+          <input type="text" class="form-control" id="blog_url" name="blog_url" placeholder="Blog URL" value="<%- locals.blog_url %>" required>
+        </p>
+        <p>
+          <label for="username">Username</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="" value="<%- locals.username %>" required>
+        </p>
+        <p>
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" value="<%- locals.email %>" required>
+        </p>
+        <p>
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+        </p>
+        <p>
+          <label for="password_again">Password Again</label>
+          <input type="password" class="form-control" id="password_again" name="password_again" placeholder="Password Again" required>
+        </p>
+        <p>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </p>
+      </form>
+    </content>
+  </main>
+
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+
+
+</body>
+
+</html>

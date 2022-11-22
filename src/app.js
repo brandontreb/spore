@@ -5,6 +5,7 @@ const compression = require('compression');
 const cors = require('cors');
 const session = require('express-session');
 const httpStatus = require('http-status');
+const methodOverride = require('method-override')
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { authLimiter } = require('./middlewares/rateLimiter');
@@ -29,22 +30,16 @@ app.use(express.json());
 // parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
 
-// sanitize request data
-app.use(xss());
-
-// gzip compression
-app.use(compression());
-
-// enable cors
-app.use(cors());
-app.options('*', cors());
+// Allows PUT and DELETE method in forms
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
 
 // Session configuration
 // TODO: Move to config file
 app.set('trust proxy', 1)
 app.use(session({
-  key: 'spore.session',
-  secret: 'spore.secret',
+  key: 'spore.blog.session',
+  secret: 'secret',
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -55,6 +50,24 @@ app.use(session({
     sameSite: 'strict',
   },
 }));
+
+// Add flash messages
+app.use(require('flash')());
+// Clear flash on each request
+app.get('/*', function(req, res, next) {
+  req.session.flash = [];
+  next();
+});
+
+// sanitize request data
+app.use(xss());
+
+// gzip compression
+app.use(compression());
+
+// enable cors
+app.use(cors());
+app.options('*', cors());
 
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');

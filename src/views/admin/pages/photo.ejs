@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
+  <main>
+    <content>
+      <h1>
+        <%- admin_title %>
+      </h1>
+      <p>By default spore.blog uses <a href="https://gravatar.com/">Gravatar</a> for your profile photo. If you'd like to change your profile photo, you can upload a new image file here.</p>
+      <form method="post" action="/admin/photo" enctype="multipart/form-data">
+        <label>New profile photo:</label>
+        <p>
+          <input type="file" name="profile_photo" required/>
+        </p>
+        <p>
+          <button type="submit" value="upload">Upload</button>
+        </p>
+      </form>
+      <hr>
+      <p>
+        <p><label>Current profile photo:</label></p>
+        <% if(blog.profile_photo) { %>
+          <p>
+            <img src="<%- blog.url %>/<%- blog.profile_photo %>" alt="profile photo" width="100" height="100" />
+          </p>
+          <!-- Delete form-->
+          <p>
+            <form method="post" action="/admin/photo?_method=delete">
+              <button type="submit" value="delete">Delete</button>
+            </form>
+          </p>
+          <% } else { %>
+            <!-- load from gravatar-->
+            <p>
+              <img src="<%- blog.gravatar %>" alt="profile photo" width="100" height="100" />
+            </p>
+            <% } %>
+      </p>
+    </content>
+  </main>
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+</body>
+
+</html>

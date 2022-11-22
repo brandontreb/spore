@@ -50,4 +50,5 @@ module.exports = {
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
     idExpirationMinutes: envVars.JWT_ID_EXPIRATION_MINUTES,
   },
+  dev: false
 };

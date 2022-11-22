@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
+  <main>
+    <content>
+      <form method="post" action="/admin?_method=put">
+
+        <h2>Blog Settings</h2>
+
+        <p>
+          <label for="title">Blog title</label>
+          <input type="text" class="form-control" id="blog_title" name="blog_title" placeholder="Blog Title" value="<%- blog.blog_title%>" required>
+        </p>
+        <p>
+          <label for="title">Blog URL</label>
+          <input type="text" class="form-control" id="blog_url" name="blog_url" placeholder="Blog URL" value="<%- blog.blog_url %>" required>
+        </p>
+
+        <h2>User Settings</h2>
+
+        <p>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" value="<%- blog.email %>">
+        </p>
+        <p>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" value="<%- blog.username %>">
+        </p>
+        <p>
+          <label for="name">Full name:</label>
+          <input type="text" id="name" name="name" value="<%- blog.name %>">
+        </p>
+        <p>
+          <label for="website">Website:</label>
+          <input type="text" id="website" name="website" value="<%- blog.website   %>">
+        </p>
+        <p>
+          <label for="about">About me:</label>
+          <textarea name="about" id="about"><%- blog.about %></textarea>
+        </p>
+        <p>
+          <% if(blog.profile_photo) { %>
+            <img src="<%- blog.url %>/<%- blog.profile_photo %>" alt="profile photo" width="100" height="100" />
+            <% } else { %>
+              <!-- load from gravatar-->
+              <img src="<%- blog.gravatar %>" alt="profile photo" width="100" height="100" />
+              <% } %>
+                <br />
+                <a href="/admin/photo">Edit</a>
+        </p>
+
+        <details>
+          <summary>Change password</summary>
+          <p>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+          </p>
+          <p>
+            <label for="password_again">Password Again:</label>
+            <input type="password" id="password_again" name="password_again">
+          </p>
+        </details>
+        <button type="submit" value="Save">Update</button>
+      </form>
+    </content>
+  </main>
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+</body>
+
+</html>

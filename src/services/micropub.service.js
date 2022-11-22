@@ -94,8 +94,7 @@ const processMicropubDocument = (micropubDocument) => {
     meta
   }
 
-  // Handle any media
-  console.log(micropubDocument);
+  // Handle any media  
   let media = {
     photo: micropubDocument.properties.photo,
   };

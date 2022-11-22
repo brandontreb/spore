@@ -11,11 +11,6 @@ const SporeStore = class SporeStore extends ISporeStore {
   }
 
   async init(callback) {
-    logger.info('Initializing the database: SQLite');
-    let row = DB().query('SELECT * FROM oAuth2Requests');
-    if (row) {
-      console.log(row);
-    }
     callback();
   }
 
@@ -128,7 +123,7 @@ const SporeStore = class SporeStore extends ISporeStore {
           if (key && value) {
             DB().insert('post_meta', {
               postId: postObj.id,
-              key: key,
+              name: key,
               value: value
             });
           }
@@ -168,6 +163,61 @@ const SporeStore = class SporeStore extends ISporeStore {
       return row;
     }
     return null;
+  }
+
+  saveBlogMeta = async(meta) => {
+    logger.debug('Saving blog meta to the database: %j', meta);
+    if (meta) {
+      for (let key in meta) {
+        if (meta.hasOwnProperty(key)) {
+          let value = meta[key];
+          if (typeof value === 'object') {
+            // Single item arrays get squashed
+            // Multi item arrays get stored as CSV
+            if (Array.isArray(value)) {
+              if (value.length > 1) {
+                value = JSON.stringify(value);
+              } else {
+                value = value[0];
+              }
+            } else {
+              // Objects are stored as JSON
+              value = JSON.stringify(value);
+            }
+          }
+          if (key) {
+
+            // check if the meta already exists
+            let row = DB().queryFirstRow('SELECT * FROM spore_meta WHERE name = ?', key);
+            if (row) {
+              DB().update('spore_meta', { value: value }, { name: key });
+            } else {
+              DB().insert('spore_meta', {
+                name: key,
+                value: value
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  getBlogMeta = async(key = null) => {
+    logger.debug('Getting blog meta from the database %s', key);
+    if (!key) {
+      let rows = DB().query('SELECT * FROM spore_meta');
+      if (rows) {
+        return rows;
+      }
+      return null;
+    } else {
+      let row = DB().queryFirstRow('SELECT * FROM spore_meta WHERE name = ?', key);
+      if (row) {
+        return row.value;
+      }
+      return null;
+    }
   }
 }
 

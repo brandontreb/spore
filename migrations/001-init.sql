@@ -1,4 +1,12 @@
 -- Up
+
+CREATE TABLE `spore_meta` (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,  
+  name TEXT NOT NULL,
+  value TEXT NOT NULL,  
+  UNIQUE (name)
+);
+
 CREATE TABLE `oAuth2Requests` (
   id INTEGER PRIMARY KEY AUTOINCREMENT,  
   userId INTEGER NOT NULL,  
@@ -69,21 +77,15 @@ CREATE TABLE `post_categories` (
 CREATE TABLE `post_meta` (
   id INTEGER PRIMARY KEY AUTOINCREMENT,  
   postId INTEGER NOT NULL,
-  key TEXT NOT NULL,
+  name TEXT NOT NULL,
   value TEXT NOT NULL,
   createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE(postId, key)
+  UNIQUE(postId, name)
 );
 
--- category TEXT,
---   location TEXT,
---   inReplyTo TEXT,
---   repostOf TEXT,
---   likeOf TEXT,
---   syndication TEXT,
-
 -- Down
+DROP TABLE IF EXISTS `spore_meta`;
 DROP TABLE IF EXISTS `oAuth2Requests`;
 DROP TABLE IF EXISTS `media`;
 DROP TABLE IF EXISTS `posts`;

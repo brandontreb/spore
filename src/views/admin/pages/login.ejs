@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+  <main>
+    <content class="row">
+      <span class="col-3">&nbsp;</span>
+      <span class="col-6">      
+        <header>
+          <a class="title" href="/">
+            <h1>
+              <span class="title-spore">🌱</span> spore.blog |
+      <%- admin_title %>
+        </h1>
+        </a>
+        <!-- Show flash messages-->
+        <% if(flash.length > 0) { %>
+          <% flash.forEach(function(message) { %>
+            <p class="flash-message <%- message.type %> ">
+              <%= message.message %>
+            </p>
+            <% }); %>
+              <% } %>
+                </header>
+                <form action="/admin/auth/login" method="post">
+                  <p>
+                    <label for="email">Email or Username</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="">
+                  </p>
+                  <p>
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="">
+                  </p>
+                  <p>
+                    <!-- Remember Me-->
+                    <input type="checkbox" id="remember" name="remember" checked value=true>
+                    <label for="remember">Remember Me</label>
+                  </p>
+                  <p>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </p>
+                </form>
+                </span>
+                <span class="col-3">&nbsp;</span>
+    </content>
+  </main>
+
+</body>
+
+</html>
