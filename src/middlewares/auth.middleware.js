@@ -15,6 +15,7 @@ const isAdmin = (required) => async(req, res, next) => {
 
   // Check if logged in
   let session = req.session;
+  logger.debug('Session: %o', session.isLoggedIn);
 
   if (required && !config.dev) {
     if (!session.isLoggedIn) {

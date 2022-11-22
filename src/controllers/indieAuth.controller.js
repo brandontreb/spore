@@ -6,7 +6,9 @@ const SporeStore = require('../store');
 const logger = require('../config/logger');
 
 const authorize = async(req, res) => {
-  let blog = config.blog;
+  let blog = res.locals.blog;
+  console.log('blog: %j', blog);
+
   let { client_id, me, redirect_uri, response_type, scope, state } = req.query;
 
   if (!me) {
@@ -34,7 +36,7 @@ const authorize = async(req, res) => {
 }
 
 const approve = async(req, res) => {
-  let blog = config.blog;
+  let blog = res.locals.blog;
 
   if (!req.session.indieAuth) {
     return res.redirect('/');
@@ -44,7 +46,7 @@ const approve = async(req, res) => {
   const code = uniquid('sp');
 
   let indieAuthRequestBody = {
-    userId: blog.user.id,
+    // userId: blog.user.id,
     clientId: req.session.indieAuth.client_id,
     redirectUri: redirect_uri,
     scope: req.session.indieAuth.scope,
@@ -62,7 +64,7 @@ const approve = async(req, res) => {
 
 const token = async(req, res) => {
 
-  let blog = config.blog;
+  let blog = res.locals.blog;
 
   // Check for custom actions
   if (req.body.action && req.body.action === 'revoke') {

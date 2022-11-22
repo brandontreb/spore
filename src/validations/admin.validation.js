@@ -8,8 +8,8 @@ const updatePhoto = {
 
 const install = {
   body: Joi.object().keys({
-    blog_title: Joi.string().required(),
-    blog_url: Joi.string().required(),
+    title: Joi.string().required(),
+    url: Joi.string().required(),
     username: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
@@ -19,8 +19,8 @@ const install = {
 
 const updateBlog = {
   body: Joi.object().keys({
-    blog_title: Joi.string().required(),
-    blog_url: Joi.string().required(),
+    title: Joi.string().required(),
+    url: Joi.string().required(),
     username: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().allow('').optional(),

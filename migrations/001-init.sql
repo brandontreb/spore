@@ -8,8 +8,7 @@ CREATE TABLE `spore_meta` (
 );
 
 CREATE TABLE `oAuth2Requests` (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,  
-  userId INTEGER NOT NULL,  
+  id INTEGER PRIMARY KEY AUTOINCREMENT,    
   state TEXT NOT NULL,
   clientId TEXT NOT NULL,
   responseType TEXT,

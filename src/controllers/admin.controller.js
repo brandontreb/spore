@@ -22,18 +22,19 @@ const updatePhoto = catchAsync(async(req, res) => {
   await blogService.saveBlogMeta({
     profile_photo: req.file.path
   });
+  req.flash('success', 'Profile photo updated successfully');
   res.redirect('/admin');
 });
 
 const deletePhoto = catchAsync(async(req, res) => {
-  // await userService.updateUser(user.id, {
-  //   profile_photo: null
-  // });
+  await blogService.saveBlogMeta({
+    profile_photo: ''
+  });
+  req.flash('success', 'Profile photo updated successfully');
   res.redirect('/admin/photo');
 });
 
 const updateBlog = catchAsync(async(req, res) => {
-  console.log(req.body);
   await blogService.saveBlogMeta(req.body);
   req.flash('success', 'Blog updated successfully');
   res.redirect('/admin');
@@ -49,7 +50,7 @@ const install = catchAsync(async(req, res) => {
   if (Object.keys(blogMeta).length === 0) {
     return res.render('admin/pages/install', {
       admin_title: 'Install',
-      blog_url: req.protocol + '://' + req.get('host')
+      url: req.protocol + '://' + req.get('host')
     });
   }
 
@@ -58,8 +59,8 @@ const install = catchAsync(async(req, res) => {
     req.flash('error', 'Passwords do not match');
     return res.render('admin/pages/install', {
       admin_title: 'Install',
-      blog_title: blogMeta.blog_title,
-      blog_url: blogMeta.blog_url,
+      title: blogMeta.title,
+      url: blogMeta.url,
       username: blogMeta.username,
       email: blogMeta.email,
     });

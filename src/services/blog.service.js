@@ -30,9 +30,9 @@ const saveBlogMeta = async(meta) => {
     meta.username = meta.username.trim().toLowerCase();
   }
 
-  // If meta has a blog_url key, prepare it for storage
-  if (meta.blog_url) {
-    meta.blog_url = utils.normalizeUrl(meta.blog_url);
+  // If meta has a url key, prepare it for storage
+  if (meta.url) {
+    meta.url = utils.normalizeUrl(meta.url);
   }
 
   logger.info('Saving blog meta: %o', meta);

@@ -18,7 +18,10 @@
       <form method="post" action="/admin/photo" enctype="multipart/form-data">
         <label>New profile photo:</label>
         <p>
-          <input type="file" name="profile_photo" required/>
+          <input type="file" name="profile_photo" id="profile_photo" required accept="image/*" />
+        </p>
+        <p>
+          <img alt="image preview" width="100" height="100" id="image-preview" style="display:none" />
         </p>
         <p>
           <button type="submit" value="upload">Upload</button>
@@ -49,6 +52,22 @@
   <footer>
     <%- include('../partials/footer'); %>
   </footer>
+
+  <script>
+    const imgElement = document.getElementById('profile_photo');
+    const previewImgElement = document.getElementById('image-preview');
+
+    imgElement.addEventListener('change', (event) => {
+      if (!event.target.files.length) {
+        previewImgElement.style.display = 'none';
+        return previewImgElement.src = '';
+      }
+      // Set the <img>'s src to a reference URL to the selected file
+      previewImgElement.style.display = 'block';
+      return previewImgElement.src = URL.createObjectURL(event.target.files.item(0))
+    });
+  </script>
+
 </body>
 
 </html>

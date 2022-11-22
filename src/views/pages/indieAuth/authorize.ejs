@@ -11,12 +11,12 @@
     <h1>Authorization Request</h1>
   </header>
   <content>
-    <% if(blog.user.profile_photo) { %>
-      <img class="u-photo avatar" src="<%- blog.url %>/<%- blog.user.profile_photo %>" width="65" height="65" />
+    <% if(blog.profile_photo) { %>
+      <img class="u-photo avatar" src="<%- blog.url %>/<%- blog.profile_photo %>" width="65" height="65" />
       <% } else { %>
-        <img class="u-photo avatar" src="<%- blog.user.profile_photo_gravatar %>" width="65" height="65" />
+        <img class="u-photo avatar" src="<%- blog.gravatar %>" width="65" height="65" />
         <% } %>
-          <h2><strong><a target="_blank" href="<%- client_id %>"><%- client_id %></a></strong><br /> wants to access your <strong><%- blog.user.username %></strong> account.</h2>
+          <h2><strong><a target="_blank" href="<%- client_id %>"><%- client_id %></a></strong><br /> wants to access your <strong><%- blog.username %></strong> account.</h2>
           <span class="u-clear"></span>
           <p>This will allow
             <a target="_blank" href="<%- client_id %>">

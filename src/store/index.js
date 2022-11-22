@@ -190,8 +190,15 @@ const SporeStore = class SporeStore extends ISporeStore {
             // check if the meta already exists
             let row = DB().queryFirstRow('SELECT * FROM spore_meta WHERE name = ?', key);
             if (row) {
-              DB().update('spore_meta', { value: value }, { name: key });
+              // Delete the meta record if null is passed as the value
+              if (value === null || value === '') {
+                DB().delete('spore_meta', { id: row.id });
+              } else {
+                // Update the meta record
+                DB().update('spore_meta', { value: value }, { name: key });
+              }
             } else {
+              // Insert the meta record
               DB().insert('spore_meta', {
                 name: key,
                 value: value
