@@ -211,7 +211,7 @@ const SporeStore = class SporeStore extends ISporeStore {
   }
 
   getBlogMeta = async(key = null) => {
-    logger.debug('Getting blog meta from the database %s', key);
+    logger.debug('Getting blog meta from the database %s', key === null ? '[all]' : key);
     if (!key) {
       let rows = DB().query('SELECT * FROM spore_meta');
       if (rows) {

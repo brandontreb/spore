@@ -5,15 +5,14 @@ const { tokenTypes } = require('../config/tokens');
 
 /**
  * Generate token
- * @param {ObjectId} userId
  * @param {Moment} expires
  * @param {string} type
  * @param {string} [secret]
  * @returns {string}
  */
-const generateToken = (userId, expires, type, otherItems, secret = config.jwt.secret) => {
+const generateToken = (blogUrl, expires, type, otherItems, secret = config.jwt.secret) => {
   const payload = {
-    sub: userId,
+    sub: blogUrl,
     iat: moment().unix(),
     exp: expires.unix(),
     type,
@@ -46,7 +45,6 @@ const generateIndieAuthTokens = async(
 
   scope = scope || 'profile';
   client_id = client_id || 'unknown';
-  const user_id = blog.user.id;
 
   const accessTokenExpires = moment().add(100000, 'minutes');
 
@@ -55,17 +53,16 @@ const generateIndieAuthTokens = async(
     me: blog.url,
     scope,
     client_id,
-    user_id,
     expires_at: accessTokenExpires.toDate(),
     type: tokenTypes.ACCESS
   };
-  const accessToken = generateToken(user_id, accessTokenExpires, tokenTypes.ACCESS, tokenBody);
+  const accessToken = generateToken(blog.url, accessTokenExpires, tokenTypes.ACCESS, tokenBody);
 
   tokenBody.token = accessToken;
 
   // Save refresh token
   const refreshTokenExpires = moment().add(config.jwt.refreshExpirationDays, 'days');
-  const refreshToken = generateToken(blog.user.id, refreshTokenExpires, tokenTypes.REFRESH);
+  const refreshToken = generateToken(blog.url, refreshTokenExpires, tokenTypes.REFRESH);
 
   tokenBody.token = refreshToken;
   tokenBody.type = tokenTypes.REFRESH;

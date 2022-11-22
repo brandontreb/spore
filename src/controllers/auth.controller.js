@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const config = require('../config/config');
 const { blogService } = require('../services');
+const logger = require('../config/logger');
 
 const getLogin = catchAsync(async(req, res) => {
 
@@ -40,6 +41,7 @@ const loginWithEmailAndPassword = catchAsync(async(req, res, next) => {
 });
 
 const logout = catchAsync(async(req, res, next) => {
+  logger.debug('Logging out');
   req.session.destroy(err => {
     if (err) {
       console.error(err);

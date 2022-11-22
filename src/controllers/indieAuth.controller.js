@@ -135,9 +135,9 @@ const token = async(req, res) => {
   res.json({
     "me": blog.url,
     "profile": {
-      "name": blog.user.username,
+      "name": blog.username,
       "url": blog.url,
-      "photo": blog.user.profile_photo ? `${blog.url}/${blog.user.profile_photo}` : blog.user.profile_photo_gravatar
+      "photo": blog.profile_photo ? `${blog.url}/${blog.profile_photo}` : blog.gravatar,
     },
     ...tokens,
   });

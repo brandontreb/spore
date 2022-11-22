@@ -44,6 +44,9 @@ const saveBlogMeta = async(meta) => {
 const getBlog = async() => {
   // Get the meta
   let meta = await SporeStore.getBlogMeta();
+  if (!Object.keys(meta).length) {
+    return null;
+  }
 
   // If meta has a password key, remove it
   if (meta.password) {
