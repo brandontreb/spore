@@ -63,7 +63,6 @@ const SporeStore = class SporeStore extends ISporeStore {
   }
 
   async savePost(post) {
-    logger.debug('Saving post to the database: %j', post);
 
     // handle categories
     if (post.categories && post.categories.length) {
@@ -82,22 +81,26 @@ const SporeStore = class SporeStore extends ISporeStore {
     let meta = post.meta;
     delete post.meta;
 
-    DB().insert('posts', post);
+    logger.debug('Saving post to the database: %j', post);
+
+    await DB().insert('posts', post);
     let postObj = DB().queryFirstRow('SELECT * FROM posts ORDER BY id DESC LIMIT 1');
 
     logger.debug('Saving categories: %j', post.categories);
     const date = new Date();
     const sqllite_date = date.toISOString();
-    const stmt = DB().prepare('INSERT OR IGNORE INTO categories VALUES (@id, @name, @slug, @createdAt, @updatedAt)');
-    for (let category of categories) {
-      stmt.run({ id: null, name: category.name, slug: category.slug, createdAt: sqllite_date, updatedAt: sqllite_date });
-    }
-    logger.debug('Saving post to categories: %d %j', post.id, post.categories);
-    const stmt2 = DB().prepare('INSERT OR IGNORE INTO post_categories VALUES (@id, @postId, @categoryId, @createdAt, @updatedAt)');
-    for (let category of categories) {
-      let row = DB().queryFirstRow('SELECT * FROM categories WHERE slug = ?', category.slug);
-      if (row) {
-        stmt2.run({ id: null, postId: postObj.id, categoryId: row.id, createdAt: sqllite_date, updatedAt: sqllite_date });
+    if (categories && typeof categories === 'object' && categories.length) {
+      const stmt = DB().prepare('INSERT OR IGNORE INTO categories VALUES (@id, @name, @slug, @createdAt, @updatedAt)');
+      for (let category of categories) {
+        await stmt.run({ id: null, name: category.name, slug: category.slug, createdAt: sqllite_date, updatedAt: sqllite_date });
+      }
+      logger.debug('Saving post to categories: %d %j', post.id, post.categories);
+      const stmt2 = DB().prepare('INSERT OR IGNORE INTO post_categories VALUES (@id, @postId, @categoryId, @createdAt, @updatedAt)');
+      for (let category of categories) {
+        let row = DB().queryFirstRow('SELECT * FROM categories WHERE slug = ?', category.slug);
+        if (row) {
+          await stmt2.run({ id: null, postId: postObj.id, categoryId: row.id, createdAt: sqllite_date, updatedAt: sqllite_date });
+        }
       }
     }
 
@@ -121,7 +124,7 @@ const SporeStore = class SporeStore extends ISporeStore {
             }
           }
           if (key && value) {
-            DB().insert('post_meta', {
+            await DB().insert('post_meta', {
               postId: postObj.id,
               name: key,
               value: value

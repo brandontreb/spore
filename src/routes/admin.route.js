@@ -34,5 +34,6 @@ router.route('/photo')
   .delete(auth(true), adminController.deletePhoto);
 
 router.use('/auth', require('./auth.route'));
+router.use('/import', require('./import.route'));
 
 module.exports = router;

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
+  <main>
+    <content>
+      <h1>
+        Static Sites
+      </h1>
+      <p>
+        Import a folder of Markdown files into the microblog at zerocool.micro.blog. This is designed for Hugo, Jekyll, or Blot blogs.
+      </p>
+      <p class="helptext">
+        The ZIP file should contain only Markdown files for your published blog posts. Any photos referenced in the Markdown will be downloaded from the web and imported.
+      </p>
+      <form method="post" action="/admin/import/markdown" enctype="multipart/form-data">
+        <p>
+          <label for="email">Zip File:</label>
+          <input type="file" name="zip_file" required/>
+        </p>
+        <p>
+          <label for="username">Domain Name:</label>
+          <input type="text" id="domain_name" name="domain_name">
+        </p>
+        <button type="submit" value="Save">Upload</button>
+      </form>
+    </content>
+  </main>
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+</body>
+
+</html>

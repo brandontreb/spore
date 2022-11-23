@@ -49,6 +49,8 @@
     "prettier"
   ],
   "dependencies": {
+    "adm-zip": "^0.5.9",
+    "axios": "^1.1.3",
     "bcryptjs": "^2.4.3",
     "better-sqlite3-helper": "^3.1.6",
     "compression": "^1.7.4",
@@ -62,6 +64,8 @@
     "express-rate-limit": "^5.0.0",
     "express-session": "^1.17.3",
     "flash": "^1.1.0",
+    "front-matter": "^4.0.2",
+    "fs": "^0.0.1-security",
     "helmet": "^4.1.0",
     "html-entities": "^2.3.3",
     "html-to-text": "^8.2.1",
