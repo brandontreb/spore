@@ -24,50 +24,19 @@
           <input type="text" class="form-control" id="url" name="url" placeholder="Blog URL" value="<%- blog.url %>" required>
         </p>
 
-        <h2>User Settings</h2>
-
         <p>
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" value="<%- blog.email %>">
+          <label for="homepage_content">Homepage Content (markdown):</label>
+          <textarea id="homepage_content" name="homepage_content"><%- blog.homepage_content %></textarea>
         </p>
         <p>
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" value="<%- blog.username %>">
+          <label for="meta_description">Meta description:</label>
+          <textarea name="meta_description" rows="2" id="id_meta_description"><%- blog.meta_description %></textarea>
+          <span class="helptext">Max 200 characters</span>
         </p>
         <p>
-          <label for="name">Full name:</label>
-          <input type="text" id="name" name="name" value="<%- blog.name %>">
-        </p>
-        <p>
-          <label for="website">Website:</label>
-          <input type="text" id="website" name="website" value="<%- blog.website   %>">
-        </p>
-        <p>
-          <label for="about">About me:</label>
-          <textarea name="about" id="about"><%- blog.about %></textarea>
-        </p>
-        <p>
-          <% if(blog.profile_photo) { %>
-            <img src="<%- blog.url %>/<%- blog.profile_photo %>" alt="profile photo" width="100" height="100" />
-            <% } else { %>
-              <!-- load from gravatar-->
-              <img src="<%- blog.gravatar %>" alt="profile photo" width="100" height="100" />
-              <% } %>
-                <br />
-                <a href="/admin/photo">Edit</a>
+          Lang: <input type="text" id="language" name="language" value="<%- blog.language %>">
         </p>
 
-        <details>
-          <summary>Change password</summary>
-          <p>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password">
-          </p>
-          <p>
-            <label for="password_again">Password Again:</label>
-            <input type="password" id="password_again" name="password_again">
-          </p>
-        </details>
         <button type="submit" value="Save">Update</button>
       </form>
     </content>

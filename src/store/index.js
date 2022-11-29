@@ -3,11 +3,12 @@ const logger = require('../config/logger');
 const ISporeStore = require('./interface');
 
 const { slugify } = require('../utils/utils');
+const { getBlog } = require('../services/blog.service');
 
 const SporeStore = class SporeStore extends ISporeStore {
   constructor() {
     super();
-    this.db = null;
+    this.db = require('./sqlite/models');
   }
 
   async init(callback) {
@@ -229,6 +230,73 @@ const SporeStore = class SporeStore extends ISporeStore {
       return null;
     }
   }
+
+  /**
+   * Blog Methods
+   */
+  getBlog = async(include = ['user']) => {
+    try {
+      let blog = await this.db.Blogs.findOne({
+        order: [
+          ['id', 'DESC']
+        ],
+        include: include
+      });
+      return blog;
+    } catch (err) {
+      console.log(err);
+    }
+    return null;
+  }
+
+  createBlog = async(blogMeta, userMeta) => {
+    let blog = await this.db.Blogs.create(blogMeta);
+    userMeta.blog_id = blog.id;
+    await this.db.Users.create(userMeta);
+    return await this.getBlog();
+  }
+
+  updateBlog = async(body) => {
+    let blog = await this.getBlog();
+    blog = await blog.update(body);
+    return blog;
+  }
+
+  /**
+   * User Methods
+   */
+  getUserByEmailOrUsername = async(emailOrUsername) => {
+    let user = await this.db.Users.findOne({
+      where: {
+        [this.db.Sequelize.Op.or]: [
+          { email: emailOrUsername },
+          { username: emailOrUsername }
+        ]
+      }
+    });
+    return user;
+  }
+
+  updateUser = async(userId, body) => {
+    let user = await this.db.Users.findOne({
+      where: {
+        id: userId
+      }
+    });
+    user = await user.update(body);
+    console.log(user);
+    return user;
+  }
+
+  getUserById = async(userId) => {
+    let user = await this.db.Users.findOne({
+      where: {
+        id: userId
+      }
+    });
+    return user;
+  }
+
 }
 
 module.exports = new SporeStore();

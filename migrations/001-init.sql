@@ -55,6 +55,26 @@ CREATE TABLE `posts` (
   _raw TEXT
 );
 
+CREATE TABLE `statuses` (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,  
+  uri TEXT NOT NULL,  
+  account_id INTEGER,
+  name TEXT,
+  content TEXT NOT NULL,
+  visibility TEXT NOT NULL DEFAULT 'public',
+  tags TEXT,
+  reblogs_count INTEGER NOT NULL DEFAULT 0,
+  likes_count INTEGER NOT NULL DEFAULT 0,
+  replies_count INTEGER NOT NULL DEFAULT 0,
+  url TEXT NOT NULL,
+  in_reply_to TEXT,
+  reblog_of TEXT,
+  like_of TEXT,
+  text TEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+);
+
 CREATE TABLE `categories` (
   id INTEGER PRIMARY KEY AUTOINCREMENT,  
   name TEXT NOT NULL,

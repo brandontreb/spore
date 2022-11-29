@@ -15,7 +15,7 @@
         <%- admin_title %>
       </h1>
       <p>By default spore.blog uses <a href="https://gravatar.com/">Gravatar</a> for your profile photo. If you'd like to change your profile photo, you can upload a new image file here.</p>
-      <form method="post" action="/admin/photo" enctype="multipart/form-data">
+      <form method="post" action="/admin/account/photo" enctype="multipart/form-data">
         <label>New profile photo:</label>
         <p>
           <input type="file" name="profile_photo" id="profile_photo" required accept="image/*" />
@@ -30,20 +30,20 @@
       <hr>
       <p>
         <p><label>Current profile photo:</label></p>
-        <% if(blog.profile_photo) { %>
+        <% if(blog.user.profile_photo) { %>
           <p>
-            <img src="<%- blog.url %>/<%- blog.profile_photo %>" alt="profile photo" width="100" height="100" />
+            <img src="<%- blog.url %>/<%- blog.user.profile_photo %>" alt="profile photo" width="100" height="100" />
           </p>
           <!-- Delete form-->
           <p>
-            <form method="post" action="/admin/photo?_method=delete">
+            <form method="post" action="/admin/account/photo?_method=delete">
               <button type="submit" value="delete">Delete</button>
             </form>
           </p>
           <% } else { %>
             <!-- load from gravatar-->
             <p>
-              <img src="<%- blog.gravatar %>" alt="profile photo" width="100" height="100" />
+              <img src="<%- blog.user.gravatar %>" alt="profile photo" width="100" height="100" />
             </p>
             <% } %>
       </p>

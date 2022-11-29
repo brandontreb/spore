@@ -3,3 +3,4 @@ module.exports.tokenService = require('./token.service');
 module.exports.oauth2Service = require('./oauth2.service');
 module.exports.blogService = require('./blog.service');
 module.exports.importService = require('./import.service');
+module.exports.userService = require('./user.service');

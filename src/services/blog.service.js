@@ -2,7 +2,9 @@
 const passwordHash = require('password-hash');
 const logger = require('../config/logger');
 const utils = require('../utils/utils');
+const pick = require('../utils/pick');
 const SporeStore = require('../store');
+const userService = require('./user.service');
 
 const saveBlogMeta = async(meta) => {
   // if meta has a password key, hash it
@@ -30,10 +32,7 @@ const saveBlogMeta = async(meta) => {
     meta.username = meta.username.trim().toLowerCase();
   }
 
-  // If meta has a url key, prepare it for storage
-  if (meta.url) {
-    meta.url = utils.normalizeUrl(meta.url);
-  }
+
 
   logger.info('Saving blog meta: %o', meta);
 
@@ -43,53 +42,91 @@ const saveBlogMeta = async(meta) => {
 
 const getBlog = async() => {
   // Get the meta
-  let meta = await SporeStore.getBlogMeta();
-  if (!Object.keys(meta).length) {
+  let blog = await SporeStore.getBlog();
+  if (!blog) {
     return null;
   }
 
   // If meta has a password key, remove it
-  if (meta.password) {
-    delete meta.password;
-  }
+  // if (meta.password) {
+  //   delete meta.password;
+  // }
 
-  // Create a blog object
-  let blog = {};
-  // Enumerate the meta keys  
-  for (let i = 0; i < meta.length; i++) {
-    let name = meta[i].name;
-    blog[name] = meta[i].value;
-  }
+  // // Create a blog object
+  // let blog = {};
+  // // Enumerate the meta keys  
+  // for (let i = 0; i < meta.length; i++) {
+  //   let name = meta[i].name;
+  //   blog[name] = meta[i].value;
+  // }
 
-  // Set the gravatar
-  blog.gravatar = utils.getGravatar(blog.email);
+  // Set the gravatar  
 
   // Return the meta
   return blog;
 }
 
+const createBlog = async(body) => {
+  // Save the meta
+  let blogMeta = pick(body, ['title', 'url']);
+  let userMeta = pick(body, ['username', 'email', 'password']);
+  userMeta.password = passwordHash.generate(userMeta.password);
+
+  // Set the blog defaults
+  blogMeta = {
+    ...blogMeta,
+    homepage_content: '# Welcome to my spore.blog\n\nChange this content in the dashboard.',
+    homepage_content_html: '<h1> Welcome to my spore.blog</h1><p>Change this content in the dashboard.</p>',
+    meta_description: 'A new blog for my spore.blog',
+    language: 'en',
+    nav: '[Home](/)\n[Archive](/archive/)\n[Replies](/replies/)',
+    nav_html: '<a href="/">Home</a>\n<a href="/archive">Archive</a>\n<a href="/replies/">Replies</a>',
+    favicon: '🌱'
+  }
+
+  await SporeStore.createBlog(blogMeta, userMeta);
+}
+
+const updateBlog = async(body) => {
+  // Save the meta
+  let blogMeta = pick(body, ['title', 'url', 'homepage_content', 'homepage_content_html', 'meta_description', 'language', 'nav', 'nav_html', 'favicon']);
+  // If meta has a url key, prepare it for storage
+  if (blogMeta.url) {
+    blogMeta.url = utils.normalizeUrl(blogMeta.url);
+  }
+  await SporeStore.updateBlog(blogMeta);
+}
+
 const loginWithEmailAndPassword = async(email, password) => {
-  // Get the meta
-  let blogBlogEmail = await SporeStore.getBlogMeta("email");
-  let blogPassword = await SporeStore.getBlogMeta("password");
+  // // Get the meta
+  // let blogBlogEmail = await SporeStore.getBlogMeta("email");
+  // let blogPassword = await SporeStore.getBlogMeta("password");
 
-  console.log('Blog email: %s', blogBlogEmail);
-  console.log('Blog password: %s', blogPassword);
-  console.log(passwordHash.verify(password, blogPassword))
+  // console.log('Blog email: %s', blogBlogEmail);
+  // console.log('Blog password: %s', blogPassword);
+  // console.log(passwordHash.verify(password, blogPassword))
 
-  // If the email and password match, return true
-  if (blogBlogEmail && blogPassword) {
-    if (blogBlogEmail === email && passwordHash.verify(password, blogPassword)) {
+  // // If the email and password match, return true
+  // if (blogBlogEmail && blogPassword) {
+  //   if (blogBlogEmail === email && passwordHash.verify(password, blogPassword)) {
+  //     return true;
+  //   }
+  // }
+
+  // // Otherwise, return false
+  // return false;
+  let user = await userService.getUserByEmailOrUsername(email);
+  if (user) {
+    if (passwordHash.verify(password, user.password)) {
       return true;
     }
   }
-
-  // Otherwise, return false
   return false;
 }
 
 module.exports = {
-  saveBlogMeta,
+  updateBlog,
   getBlog,
-  loginWithEmailAndPassword
+  loginWithEmailAndPassword,
+  createBlog
 }

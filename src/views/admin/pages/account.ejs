@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body class="container">
+  <header>
+    <%- include('../partials/header'); %>
+  </header>
+  <main>
+    <content>
+      <form method="post" action="/admin/account?_method=put">
+        <h2>Account Settings</h2>
+        <p>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" value="<%- blog.user.email %>">
+        </p>
+        <p>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" value="<%- blog.user.username %>">
+        </p>
+        <p>
+          <label for="name">Full name:</label>
+          <input type="text" id="full_name" name="full_name" value="<%- blog.user.full_name %>">
+        </p>
+        <p>
+          <label for="website">Website:</label>
+          <input type="text" id="website" name="website" value="<%- blog.user.website   %>">
+        </p>
+        <p>
+          <label for="about">About me:</label>
+          <textarea name="about" id="about"><%- blog.user.about %></textarea>
+        </p>
+        <p>
+          <a href="/admin/account/photo">
+            <% if(blog.user.profile_photo) { %>
+              <img src="<%- blog.url %>/<%- blog.user.profile_photo %>" alt="profile photo" width="100" height="100" />
+              <% } else { %>
+                <!-- load from gravatar-->
+                <img src="<%- blog.user.gravatar %>" alt="profile photo" width="100" height="100" />
+                <% } %>
+                  <br /> Edit
+          </a>
+        </p>
+
+        <details>
+          <summary>Change password</summary>
+          <p>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+          </p>
+          <p>
+            <label for="password_again">Password Again:</label>
+            <input type="password" id="password_again" name="password_again">
+          </p>
+        </details>
+        <button type="submit" value="Save">Update</button>
+      </form>
+    </content>
+  </main>
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+</body>
+
+</html>

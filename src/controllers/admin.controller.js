@@ -12,30 +12,8 @@ const getAdmin = catchAsync(async(req, res) => {
   });
 });
 
-const getPhoto = catchAsync(async(req, res) => {
-  res.render('admin/pages/photo', {
-    admin_title: 'Profile Photo',
-  });
-});
-
-const updatePhoto = catchAsync(async(req, res) => {
-  await blogService.saveBlogMeta({
-    profile_photo: req.file.path
-  });
-  req.flash('success', 'Profile photo updated successfully');
-  res.redirect('/admin');
-});
-
-const deletePhoto = catchAsync(async(req, res) => {
-  await blogService.saveBlogMeta({
-    profile_photo: ''
-  });
-  req.flash('success', 'Profile photo updated successfully');
-  res.redirect('/admin/photo');
-});
-
 const updateBlog = catchAsync(async(req, res) => {
-  await blogService.saveBlogMeta(req.body);
+  await blogService.updateBlog(req.body);
   req.flash('success', 'Blog updated successfully');
   res.redirect('/admin');
 });
@@ -68,7 +46,8 @@ const install = catchAsync(async(req, res) => {
 
   delete blogMeta.password_again;
 
-  await blogService.saveBlogMeta(blogMeta);
+  // await blogService.saveBlogMeta(blogMeta);
+  await blogService.createBlog(blogMeta);
   req.flash('success', 'Blog installed successfully. Please log in.');
   return res.redirect('/admin');
 
@@ -76,9 +55,6 @@ const install = catchAsync(async(req, res) => {
 
 module.exports = {
   getAdmin,
-  getPhoto,
-  updatePhoto,
-  deletePhoto,
   install,
   updateBlog
 };
