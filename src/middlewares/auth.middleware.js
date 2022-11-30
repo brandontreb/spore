@@ -3,9 +3,9 @@ const httpStatus = require('http-status');
 const logger = require('../config/logger');
 const { blogService } = require('../services');
 
-const isAdmin = (required) => async(req, res, next) => {
+const auth = (required) => async(req, res, next) => {
+  // If the blog doesn't exist, Spore must be installed
   let blog = await blogService.getBlog();
-
   if (!blog) {
     if (req.originalUrl !== '/admin/install') {
       return res.redirect('/admin/install');
@@ -13,19 +13,18 @@ const isAdmin = (required) => async(req, res, next) => {
     return next();
   }
 
-  // Check if logged in
-  let session = req.session;
-  logger.debug('Session: %o', session.isLoggedIn);
-
   if (required && !config.dev) {
+    // Check if the user is logged in
+    let session = req.session;
     if (!session.isLoggedIn) {
+      // If the user is not logged in, redirect to the login page
       let currentPath = req.originalUrl;
       currentPath = encodeURIComponent(currentPath);
       return res.redirect(`/admin/auth/login?redirect=${currentPath}`);
     }
   }
 
-
+  // Hydrate the locals with the blog/user data
   res.locals = {
     ...res.locals,
     blog,
@@ -33,4 +32,4 @@ const isAdmin = (required) => async(req, res, next) => {
   next();
 };
 
-module.exports = isAdmin;
+module.exports = auth;

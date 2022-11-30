@@ -4,7 +4,6 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const logger = require('../config/logger');
 const { blogService } = require('../services');
-const flash = require('flash');
 
 const getAdmin = catchAsync(async(req, res) => {
   res.render('admin/pages/index', {
@@ -21,11 +20,14 @@ const updateBlog = catchAsync(async(req, res) => {
 const install = catchAsync(async(req, res) => {
   let blog = res.locals.blog;
   let blogMeta = req.body;
+
+  // Redirect if the blog is already installed
   if (blog) {
     return res.redirect('/admin');
   }
 
-  if (Object.keys(blogMeta).length === 0) {
+  // If this is a GET request, render the install page  
+  if (req.method === 'GET' || Object.keys(blogMeta).length === 0) {
     return res.render('admin/pages/install', {
       admin_title: 'Install',
       url: req.protocol + '://' + req.get('host')
@@ -44,9 +46,7 @@ const install = catchAsync(async(req, res) => {
     });
   }
 
-  delete blogMeta.password_again;
-
-  // await blogService.saveBlogMeta(blogMeta);
+  // Create the blog and redirect to the admin page
   await blogService.createBlog(blogMeta);
   req.flash('success', 'Blog installed successfully. Please log in.');
   return res.redirect('/admin');

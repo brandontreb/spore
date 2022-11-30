@@ -25,6 +25,11 @@
         </p>
 
         <p>
+          <label for="nav">Navigation (markdown links)</label>
+          <textarea id="nav" name="nav"><%- blog.nav %></textarea>
+        </p>
+
+        <p>
           <label for="homepage_content">Homepage Content (markdown):</label>
           <textarea id="homepage_content" name="homepage_content"><%- blog.homepage_content %></textarea>
         </p>
@@ -35,6 +40,11 @@
         </p>
         <p>
           Lang: <input type="text" id="language" name="language" value="<%- blog.language %>">
+        </p>
+        <p>
+          <label for="favicon" style="line-height: 2.4;">Favicon: &nbsp;</label>
+          <input type="text" name="favicon" id="favicon" class="favicon" value="<%- blog.favicon %>" id="favicon" />
+          <span class="helptext"><a target="_blank" href="https://getemoji.com/">Get an emoji</a></span>
         </p>
 
         <button type="submit" value="Save">Update</button>

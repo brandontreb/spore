@@ -1,5 +1,4 @@
 :root {
-   
   /* --background-color: #fff;
   --color: hsl(205deg, 20%, 32%);
   --h1-color: hsl(205deg, 30%, 15%);
@@ -11,36 +10,39 @@
   --primary: hsl(195deg, 85%, 41%);  
   --primary-inverse: #fff;
   --secondary: hsl(205deg, 15%, 41%);   */
-  
-
-  --secondary: hsl(205deg, 15%, 41%); 
-  --secondary-inverse: #fff;  
+  --secondary: hsl(205deg, 15%, 41%);
+  --secondary-inverse: #fff;
   --links: hsl(195deg, 85%, 41%);
   --button-base: #EFEFEF;
   --button-border: #CCC;
 }
+
+
 /* water.css overrides */
+
 nav a {
-  margin-right: 10px;    
+  margin-right: 10px;
 }
 
 nav a:hover {
   text-decoration: none;
 }
 
-time {  
+time {
   color: var(--links);
-  background: none;    
+  background: none;
   border-radius: 0;
-  padding:0;
+  padding: 0;
   padding-bottom: 1px;
   font-weight: bold;
 }
 
+
 /* classes */
+
 #favicon {
   width: 20px;
-  display: inline;
+  /* display: inline; */
   border: 1px solid;
   text-align: center;
 }
@@ -87,17 +89,22 @@ time {
   color: var(--secondary-inverse);
 }
 
+
 /* Forms */
-input, textarea {
+
+input,
+textarea {
   background: none;
   border: 1px solid lightgray;
 }
 
-input[type="text"], input[type="password"], input[type="email"] {
+input[type="text"],
+input[type="password"],
+input[type="email"] {
   width: 100%;
 }
 
-label {  
+label {
   color: var(--secondary);
   font-size: 0.8em;
 }
@@ -106,16 +113,22 @@ details {
   background-color: #fff;
 }
 
+
 /* Overrides */
-.row [class^="col"] {  
-  margin: 0px;  
+
+.row [class^="col"] {
+  margin: 0px;
 }
-@media only screen and (min-width: 45em) {  /* 720px */
+
+@media only screen and (min-width: 45em) {
+  /* 720px */
   .col-6 {
     width: 50%;
   }
 }
-@media only screen and (min-width: 60em) { /* 960px */
+
+@media only screen and (min-width: 60em) {
+  /* 960px */
   .container {
     width: 75%;
     max-width: 45rem;
@@ -127,19 +140,25 @@ button {
   padding: 0.5em 0.95em 0.5em 0.75em;
 }
 
+
 /* Utility */
+
 .u-float-right {
   float: right !important;
 }
+
 .u-float-left {
   float: left !important;
 }
+
 .u-clearfix {
   clear: both;
 }
+
 .u-hidden {
   display: none;
 }
+
 .u-show {
   display: block;
 }

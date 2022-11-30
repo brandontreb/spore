@@ -18,7 +18,7 @@
       <form method="post" action="/admin/account/photo" enctype="multipart/form-data">
         <label>New profile photo:</label>
         <p>
-          <input type="file" name="profile_photo" id="profile_photo" required accept="image/*" />
+          <input type="file" name="avatar" id="avatar" required accept="image/*" />
         </p>
         <p>
           <img alt="image preview" width="100" height="100" id="image-preview" style="display:none" />
@@ -30,9 +30,9 @@
       <hr>
       <p>
         <p><label>Current profile photo:</label></p>
-        <% if(blog.user.profile_photo) { %>
+        <% if(blog.user.avatar) { %>
           <p>
-            <img src="<%- blog.url %>/<%- blog.user.profile_photo %>" alt="profile photo" width="100" height="100" />
+            <img src="<%- blog.url %>/<%- blog.user.avatar %>" alt="profile photo" width="100" height="100" />
           </p>
           <!-- Delete form-->
           <p>
@@ -54,7 +54,7 @@
   </footer>
 
   <script>
-    const imgElement = document.getElementById('profile_photo');
+    const imgElement = document.getElementById('avatar');
     const previewImgElement = document.getElementById('image-preview');
 
     imgElement.addEventListener('change', (event) => {

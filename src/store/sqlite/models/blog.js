@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         return this.getDataValue('url').replace(/\/$/, '').trim();
       }
     },
-    bare_url: {
+    naked_url: {
       type: DataTypes.VIRTUAL,
       get: function() {
         let url = this.getDataValue('url');

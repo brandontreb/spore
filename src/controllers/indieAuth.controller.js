@@ -1,15 +1,13 @@
 const uniquid = require('uniqid');
 const utils = require('../utils/utils');
-const config = require('../config/config');
 const { tokenService, oauth2Service } = require('../services');
 const SporeStore = require('../store');
 const logger = require('../config/logger');
 
 const authorize = async(req, res) => {
   let blog = res.locals.blog;
-  console.log('blog: %j', blog);
 
-  let { client_id, me, redirect_uri, response_type, scope, state } = req.query;
+  let { client_id, me, redirect_uri, scope, state } = req.query;
 
   if (!me) {
     return res.redirect(`${redirect_uri}?error=parameter_absent&error_description=me+parameter+absent&state=${state}`);
@@ -46,18 +44,19 @@ const approve = async(req, res) => {
   const code = uniquid('sp');
 
   let indieAuthRequestBody = {
-    // userId: blog.user.id,
-    clientId: req.session.indieAuth.client_id,
-    redirectUri: redirect_uri,
+    blog_id: blog.id,
+    user_id: blog.user.id,
+    client_id: req.session.indieAuth.client_id,
+    redirect_uri: redirect_uri,
     scope: req.session.indieAuth.scope,
     code: code,
     state: state,
-    responseType: req.session.indieAuth.response_type,
-    codeChallenge: req.session.indieAuth.code_challenge,
-    codeChallengeMethod: req.session.indieAuth.code_challenge_method,
+    response_type: req.session.indieAuth.response_type,
+    code_challenge: req.session.indieAuth.code_challenge,
+    code_challenge_method: req.session.indieAuth.code_challenge_method,
   }
 
-  await SporeStore.saveOAuth2Request(indieAuthRequestBody);
+  await SporeStore.saveOAuthRequest(indieAuthRequestBody);
 
   res.redirect(`${redirect_uri}?code=${code}&state=${state}&me=${encodeURIComponent(blog.url)}`);
 }
@@ -82,7 +81,7 @@ const token = async(req, res) => {
     });
   }
 
-  let indieAuthRequest = await SporeStore.getOAuth2RequestByCode(code);
+  let indieAuthRequest = await SporeStore.getOAuthRequestByCode(code);
   logger.debug('indieAuthRequest: %j', indieAuthRequest);
 
   if (!indieAuthRequest) {
@@ -92,7 +91,7 @@ const token = async(req, res) => {
     });
   }
 
-  if (indieAuthRequest.codeChallenge && !code_verifier) {
+  if (indieAuthRequest.code_challenge && !code_verifier) {
     return res.status(400).json({
       error: 'invalid_request',
       error_description: 'code_verifier+parameter+absent'
@@ -100,10 +99,10 @@ const token = async(req, res) => {
   }
 
   // PKCE Check
-  if (indieAuthRequest.codeChallenge) {
+  if (indieAuthRequest.code_challenge) {
     if (grant_type === 'authorization_code' || grant_type == undefined) {
       let pkceVerifyChallengePassed = await oauth2Service.verifyPKCECodeChallengeFromVerifier(code_verifier,
-        indieAuthRequest.codeChallenge, indieAuthRequest.codeChallengeMethod);
+        indieAuthRequest.code_challenge, indieAuthRequest.code_challenge_method);
       if (!pkceVerifyChallengePassed) {
         return res.status(400).json({
           error: 'invalid_grant',
@@ -119,7 +118,8 @@ const token = async(req, res) => {
   }
 
   // Make sure redirect_uri is the same as the one in the request
-  if (redirect_uri !== indieAuthRequest.redirectUri) {
+  console.log('redirect_uri: %s', redirect_uri);
+  if (redirect_uri !== indieAuthRequest.redirect_uri) {
     return res.status(400).json({
       error: 'invalid_request',
       error_description: 'invalid+redirect_uri'
@@ -127,7 +127,7 @@ const token = async(req, res) => {
   }
 
   let scope = indieAuthRequest.scope;
-  let clientId = indieAuthRequest.clientId;
+  let clientId = indieAuthRequest.client_id;
   let indieAuthRequestId = indieAuthRequest.id;
 
   let tokens = await tokenService.generateIndieAuthTokens(blog, scope, clientId, indieAuthRequestId);
@@ -135,9 +135,9 @@ const token = async(req, res) => {
   res.json({
     "me": blog.url,
     "profile": {
-      "name": blog.username,
+      "name": blog.user.username,
       "url": blog.url,
-      "photo": blog.profile_photo ? `${blog.url}/${blog.profile_photo}` : blog.gravatar,
+      "photo": blog.user.avatar ? `${blog.url}/${blog.user.avatar}` : blog.user.gravatar,
     },
     ...tokens,
   });

@@ -25,7 +25,7 @@ router.route('/')
 
 router.route('/photo')
   .get(auth(true), accountController.getPhoto)
-  .post(auth(true), validate(accountValidation.updatePhoto), upload.single('profile_photo'), accountController.updatePhoto)
+  .post(auth(true), validate(accountValidation.updatePhoto), upload.single('avatar'), accountController.updatePhoto)
   .delete(auth(true), accountController.deletePhoto);
 
 module.exports = router;

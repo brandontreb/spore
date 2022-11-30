@@ -1,11 +1,5 @@
 const Joi = require('joi');
 
-const updatePhoto = {
-  // body: Joi.object().keys({
-  //   profile_photo: Joi.object().required(),
-  // })
-}
-
 const install = {
   body: Joi.object().keys({
     title: Joi.string().required(),
@@ -24,11 +18,12 @@ const updateBlog = {
     homepage_content: Joi.string().allow('').optional(),
     meta_description: Joi.string().allow('').optional(),
     language: Joi.string().allow('').optional(),
+    nav: Joi.string().allow('').optional(),
+    favicon: Joi.string().allow('').optional(),
   })
 }
 
 module.exports = {
-  updatePhoto,
   install,
   updateBlog
 }

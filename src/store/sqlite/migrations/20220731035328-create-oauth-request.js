@@ -1,44 +1,42 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('OAuthRequests', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      blog_id: {
-        allowNull: false,
+      client_id: {
+        type: Sequelize.STRING
+      },
+      response_type: {
+        type: Sequelize.STRING
+      },
+      redirect_uri: {
+        type: Sequelize.STRING
+      },
+      scope: {
+        type: Sequelize.STRING
+      },
+      code_challenge: {
+        type: Sequelize.STRING
+      },
+      code_challenge_method: {
+        type: Sequelize.STRING
+      },
+      user_id: {
         type: Sequelize.INTEGER
       },
-      email: {
+      blog_id: {
+        type: Sequelize.INTEGER
+      },
+      code: {
         type: Sequelize.STRING
       },
-      username: {
+      grant_type: {
         type: Sequelize.STRING
-      },
-      password: {
-        type: Sequelize.STRING
-      },
-      acct: { // user@domain
-        type: Sequelize.STRING
-      },
-      display_name: {
-        type: Sequelize.STRING
-      },
-      website: {
-        type: Sequelize.STRING
-      },
-      note: {
-        type: Sequelize.TEXT
-      },
-      avatar: {
-        type: Sequelize.STRING
-      },
-      post_count: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
       },
       createdAt: {
         allowNull: false,
@@ -51,6 +49,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('OAuthRequests');
   }
 };

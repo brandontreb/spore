@@ -22,21 +22,21 @@
           <input type="text" id="username" name="username" value="<%- blog.user.username %>">
         </p>
         <p>
-          <label for="name">Full name:</label>
-          <input type="text" id="full_name" name="full_name" value="<%- blog.user.full_name %>">
+          <label for="name">Display name:</label>
+          <input type="text" id="display_name" name="display_name" value="<%- blog.user.display_name %>">
         </p>
         <p>
           <label for="website">Website:</label>
           <input type="text" id="website" name="website" value="<%- blog.user.website   %>">
         </p>
         <p>
-          <label for="about">About me:</label>
-          <textarea name="about" id="about"><%- blog.user.about %></textarea>
+          <label for="note">About me:</label>
+          <textarea name="note" id="note"><%- blog.user.note %></textarea>
         </p>
         <p>
           <a href="/admin/account/photo">
-            <% if(blog.user.profile_photo) { %>
-              <img src="<%- blog.url %>/<%- blog.user.profile_photo %>" alt="profile photo" width="100" height="100" />
+            <% if(blog.user.avatar) { %>
+              <img src="<%- blog.url %>/<%- blog.user.avatar %>" alt="profile photo" width="100" height="100" />
               <% } else { %>
                 <!-- load from gravatar-->
                 <img src="<%- blog.user.gravatar %>" alt="profile photo" width="100" height="100" />

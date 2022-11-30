@@ -4,9 +4,9 @@ const updateAccount = {
   body: Joi.object().keys({
     email: Joi.string().required(),
     username: Joi.string().required(),
-    full_name: Joi.string().allow('').optional(),
+    display_name: Joi.string().allow('').optional(),
     website: Joi.string().allow('').optional(),
-    about: Joi.string().allow('').optional(),
+    note: Joi.string().allow('').optional(),
     image_url: Joi.string().allow('').optional(),
     password: Joi.string().allow('').optional(),
     password_again: Joi.string().allow('').optional(),
@@ -15,7 +15,7 @@ const updateAccount = {
 
 const updatePhoto = {
   // body: Joi.object().keys({
-  //   profile_photo: Joi.object().required(),
+  //   avatar: Joi.object().required(),
   // })
 }
 

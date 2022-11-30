@@ -6,15 +6,18 @@ const auth = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
+// Blog Settings
 router
   .route('/')
   .get(auth(true), adminController.getAdmin)
   .put(auth(true), validate(adminValidation.updateBlog), adminController.updateBlog);
 
+// Install
 router.route('/install')
   .get(auth(false), adminController.install)
   .post(validate(adminValidation.install), adminController.install);
 
+// Other Admin Routes
 router.use('/auth', require('./auth.route'));
 router.use('/import', require('./import.route'));
 router.use('/account', require('./account.route'));

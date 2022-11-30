@@ -6,63 +6,14 @@ const pick = require('../utils/pick');
 const SporeStore = require('../store');
 const userService = require('./user.service');
 
-const saveBlogMeta = async(meta) => {
-  // if meta has a password key, hash it
-  if (meta.password) {
-    if (meta.password.trim().length > 0) {
-      console.log('Hashing password of length %d', meta.password.length);
-      meta.password = passwordHash.generate(meta.password);
-      delete meta.password_again;
-    } else {
-      delete meta.password;
-      delete meta.password_again;
-    }
-  } else {
-    delete meta.password;
-    delete meta.password_again;
-  }
-
-  // If meta has email key, prepare it for storage
-  if (meta.email) {
-    meta.email = meta.email.trim().toLowerCase();
-  }
-
-  // If meta has username key, prepare it for storage
-  if (meta.username) {
-    meta.username = meta.username.trim().toLowerCase();
-  }
-
-
-
-  logger.info('Saving blog meta: %o', meta);
-
-  // Save the meta
-  await SporeStore.saveBlogMeta(meta);
-}
-
 const getBlog = async() => {
-  // Get the meta
   let blog = await SporeStore.getBlog();
   if (!blog) {
+    logger.error('Blog not found');
     return null;
   }
-
-  // If meta has a password key, remove it
-  // if (meta.password) {
-  //   delete meta.password;
-  // }
-
-  // // Create a blog object
-  // let blog = {};
-  // // Enumerate the meta keys  
-  // for (let i = 0; i < meta.length; i++) {
-  //   let name = meta[i].name;
-  //   blog[name] = meta[i].value;
-  // }
-
-  // Set the gravatar  
-
-  // Return the meta
+  logger.info('Blog found');
+  logger.debug(blog);
   return blog;
 }
 
@@ -70,7 +21,11 @@ const createBlog = async(body) => {
   // Save the meta
   let blogMeta = pick(body, ['title', 'url']);
   let userMeta = pick(body, ['username', 'email', 'password']);
+
+  // Hash the password
   userMeta.password = passwordHash.generate(userMeta.password);
+  // Generate acct which is username@domain
+  userMeta.acct = `${userMeta.username}@${utils.nakedUrl(blogMeta.url)}`;
 
   // Set the blog defaults
   blogMeta = {
@@ -89,7 +44,14 @@ const createBlog = async(body) => {
 
 const updateBlog = async(body) => {
   // Save the meta
-  let blogMeta = pick(body, ['title', 'url', 'homepage_content', 'homepage_content_html', 'meta_description', 'language', 'nav', 'nav_html', 'favicon']);
+  let blogMeta = pick(body, [
+    'title', 'url', 'homepage_content', 'homepage_content_html', 'meta_description',
+    'language', 'nav', 'nav_html', 'favicon'
+  ]);
+  // Cache the HTML of the nav markdown for faster loading
+  if (blogMeta.nav) {
+    blogMeta.nav_html = utils.markdownToHtml(blogMeta.nav);
+  }
   // If meta has a url key, prepare it for storage
   if (blogMeta.url) {
     blogMeta.url = utils.normalizeUrl(blogMeta.url);
@@ -98,23 +60,7 @@ const updateBlog = async(body) => {
 }
 
 const loginWithEmailAndPassword = async(email, password) => {
-  // // Get the meta
-  // let blogBlogEmail = await SporeStore.getBlogMeta("email");
-  // let blogPassword = await SporeStore.getBlogMeta("password");
-
-  // console.log('Blog email: %s', blogBlogEmail);
-  // console.log('Blog password: %s', blogPassword);
-  // console.log(passwordHash.verify(password, blogPassword))
-
-  // // If the email and password match, return true
-  // if (blogBlogEmail && blogPassword) {
-  //   if (blogBlogEmail === email && passwordHash.verify(password, blogPassword)) {
-  //     return true;
-  //   }
-  // }
-
-  // // Otherwise, return false
-  // return false;
+  // Look up the user by email or username
   let user = await userService.getUserByEmailOrUsername(email);
   if (user) {
     if (passwordHash.verify(password, user.password)) {

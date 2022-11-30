@@ -1,9 +1,6 @@
-const DB = require('better-sqlite3-helper');
 const logger = require('../config/logger');
 const ISporeStore = require('./interface');
-
 const { slugify } = require('../utils/utils');
-const { getBlog } = require('../services/blog.service');
 
 const SporeStore = class SporeStore extends ISporeStore {
   constructor() {
@@ -16,18 +13,16 @@ const SporeStore = class SporeStore extends ISporeStore {
   }
 
   // OAuth2
-  async saveOAuth2Request(oAuth2Request) {
-    logger.info('Saving OAuth2 request: %j', oAuth2Request);
-    DB().insert('oAuth2Requests', oAuth2Request);
+  async saveOAuthRequest(oauthRequest) {
+    logger.info('Saving OAuth request: %j', oauthRequest);
+    let request = await this.db.OAuthRequests.create(oauthRequest);
+    return request;
   }
 
-  async getOAuth2RequestByCode(code) {
-    logger.info('Getting OAuth2 request: %s', code);
-    let row = DB().queryFirstRow('SELECT * FROM oAuth2Requests WHERE code = ?', code);
-    if (row) {
-      return row;
-    }
-    return null;
+  async getOAuthRequestByCode(code) {
+    logger.info('Getting OAuth request: %s', code);
+    let request = await this.db.OAuthRequests.findOne({ where: { code: code } });
+    return request;
   }
 
   // Media
@@ -235,18 +230,13 @@ const SporeStore = class SporeStore extends ISporeStore {
    * Blog Methods
    */
   getBlog = async(include = ['user']) => {
-    try {
-      let blog = await this.db.Blogs.findOne({
-        order: [
-          ['id', 'DESC']
-        ],
-        include: include
-      });
-      return blog;
-    } catch (err) {
-      console.log(err);
-    }
-    return null;
+    let blog = await this.db.Blogs.findOne({
+      order: [
+        ['id', 'DESC']
+      ],
+      include: include
+    });
+    return blog;
   }
 
   createBlog = async(blogMeta, userMeta) => {

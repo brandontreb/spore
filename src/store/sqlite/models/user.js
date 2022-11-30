@@ -1,6 +1,6 @@
 'use strict';
 const crypto = require('crypto')
-  // const bcrypt = require('bcrypt');
+const PROTECTED_ATTRIBUTES = ['password', 'createdAt', 'updatedAt'];
 const {
   Model
 } = require('sequelize');
@@ -23,9 +23,18 @@ module.exports = (sequelize, DataTypes) => {
       //   foreignKey: 'user_id',
       //   as: 'posts'
       // });
-
     }
-  }
+
+    toJSON() {
+      // hide protected fields
+      let attributes = Object.assign({}, this.get());
+      for (let a of PROTECTED_ATTRIBUTES) {
+        delete attributes[a];
+      }
+      return attributes;
+    }
+  };
+
   User.init({
     email: {
       type: DataTypes.STRING,
@@ -35,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true
       },
       set: function(val) {
-        this.setDataValue('email', val.toLowerCase());
+        this.setDataValue('email', val.trim().toLowerCase());
       }
     },
     username: {
@@ -43,17 +52,29 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false,
       set: function(val) {
-        this.setDataValue('username', val.toLowerCase());
+        this.setDataValue('username', val.trim().toLowerCase());
       }
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    full_name: DataTypes.STRING,
+    acct: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      set: function(val) {
+        this.setDataValue('acct', val.trim().toLowerCase());
+      }
+    },
+    post_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    display_name: DataTypes.STRING,
     website: DataTypes.STRING,
-    about: DataTypes.TEXT,
-    profile_photo: DataTypes.STRING,
+    note: DataTypes.TEXT,
+    avatar: DataTypes.STRING,
     gravatar: {
       type: DataTypes.VIRTUAL,
       get() {

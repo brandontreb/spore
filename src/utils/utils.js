@@ -1,8 +1,22 @@
+const MarkdownIt = require('markdown-it');
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true
+});
+
 const normalizeUrl = (url) => {
   url = url.trim();
   if (url.endsWith('/')) {
     url = url.slice(0, -1);
   }
+  return url;
+}
+
+const nakedUrl = (url) => {
+  url = url.replace(/^https?:\/\//, '').replace(/\/$/, '').replace(/:\d+$/, '').replace(/^www\./, '');
+  url = url.split('?')[0];
+  url = url.replace(/\/$/, '');
   return url;
 }
 
@@ -19,8 +33,14 @@ const getGravatar = (email) => {
   return `https://www.gravatar.com/avatar/${md5(email.trim().toLowerCase())}`;
 };
 
+const markdownToHtml = (markdown) => {
+  return md.render(markdown);
+};
+
 module.exports = {
   normalizeUrl,
   slugify,
   getGravatar,
+  markdownToHtml,
+  nakedUrl
 }
