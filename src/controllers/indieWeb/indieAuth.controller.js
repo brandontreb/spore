@@ -1,8 +1,8 @@
 const uniquid = require('uniqid');
-const utils = require('../utils/utils');
-const { tokenService, oauth2Service } = require('../services');
-const SporeStore = require('../store');
-const logger = require('../config/logger');
+const utils = require('../../utils/utils');
+const { tokenService, oauth2Service } = require('../../services');
+const SporeStore = require('../../store');
+const logger = require('../../config/logger');
 
 const authorize = async(req, res) => {
   let blog = res.locals.blog;
@@ -30,7 +30,7 @@ const authorize = async(req, res) => {
   }
 
   let insecure = req.query.code_challenge === null;
-  res.render('pages/indieAuth/authorize', {...req.session.indieAuth, blog, redirect_uri, insecure });
+  res.render('indieWeb/indieAuth/authorize', {...req.session.indieAuth, blog, redirect_uri, insecure });
 }
 
 const approve = async(req, res) => {

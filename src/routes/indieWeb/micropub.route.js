@@ -1,7 +1,7 @@
 const express = require('express');
-const { micropubController } = require('../controllers');
-const indieAuth = require('../middlewares/indieAuth');
-const upload = require('../middlewares/upload.middleware');
+const { micropubController } = require('../../controllers/indieWeb');
+const indieAuth = require('../../middlewares/indieAuth');
+const upload = require('../../middlewares/upload.middleware');
 
 const router = express.Router();
 

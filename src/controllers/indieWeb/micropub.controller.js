@@ -1,10 +1,10 @@
-const config = require('../config/config');
-const catchAsync = require('../utils/catchAsync');
+const config = require('../../config/config');
+const catchAsync = require('../../utils/catchAsync');
 const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError');
-const logger = require('../config/logger');
-const { micropubService } = require('../services');
-const SporeStore = require('../store');
+const ApiError = require('../../utils/ApiError');
+const logger = require('../../config/logger');
+const { indieWebService } = require('../../services');
+const SporeStore = require('../../store');
 
 const create = catchAsync(async(req, res, next) => {
   let { body, query } = req;
@@ -30,14 +30,14 @@ const create = catchAsync(async(req, res, next) => {
   // Check the body type and process accordingly
   if (body) {
     if (req.is('json')) {
-      body = micropubService.processJsonEncodedBody(req.body);
+      body = indieWebService.processJsonEncodedBody(req.body);
     } else {
-      body = micropubService.processFormEncodedBody(req.body);
+      body = indieWebService.processFormEncodedBody(req.body);
     }
   }
   logger.info('Micropub request: %j', body);
 
-  let post = micropubService.processMicropubDocument(body);
+  let post = indieWebService.processMicropubDocument(body);
 
   // TODO: Check if published in future and update the slug  
   let now = new Date();

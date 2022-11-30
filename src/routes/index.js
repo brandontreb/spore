@@ -1,17 +1,12 @@
 const express = require('express');
-const indieAuthRoute = require('./indieAuth.route');
-const micropubRoute = require('./micropub.route');
+const indieWebRoutes = require('./indieWeb');
 const adminRoute = require('./admin.route');
 
 const router = express.Router();
 
 const defaultRoutes = [{
-    path: '/micropub',
-    route: micropubRoute,
-    middleware: [],
-  }, {
-    path: '/indieAuth',
-    route: indieAuthRoute,
+    path: '/indieWeb',
+    route: indieWebRoutes,
     middleware: [],
   },
   {
