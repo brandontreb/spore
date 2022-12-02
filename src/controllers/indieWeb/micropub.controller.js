@@ -39,11 +39,6 @@ const create = catchAsync(async(req, res, next) => {
 
   let post = indieWebService.processMicropubDocument(body);
 
-  // TODO: Check if published in future and update the slug  
-  let now = new Date();
-  const date = now.toISOString().split('T')[0].replaceAll('-', '/');
-  post.permalink = `/${date}/${post.slug}`;
-
   let postObj = await SporeStore.savePost({...post, _raw: raw });
 
   res.set('Location', `${blog.url}${postObj.permalink}`).status(httpStatus.CREATED).send();

@@ -1,6 +1,7 @@
 const express = require('express');
 const indieWebRoutes = require('./indieWeb');
-const adminRoute = require('./admin.route');
+const adminRoutes = require('./admin.route');
+const blogRoutes = require('./blog.route');
 
 const router = express.Router();
 
@@ -11,10 +12,15 @@ const defaultRoutes = [{
   },
   {
     path: '/admin',
-    route: adminRoute,
+    route: adminRoutes,
     middleware: [],
   },
-
+  // All other paths routed to blog routes
+  {
+    path: '/',
+    route: blogRoutes,
+    middleware: [],
+  },
 ];
 
 defaultRoutes.forEach((route) => {

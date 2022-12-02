@@ -18,6 +18,7 @@ const processMicropubDocument = (micropubDocument) => {
   let categories = [];
   let slug = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   let type = 'note';
+  let permalink = '';
 
   // Title
   if (micropubDocument.properties.name) {
@@ -77,10 +78,18 @@ const processMicropubDocument = (micropubDocument) => {
     slug = micropubDocument.mp.slug[0];
   }
 
+  // Type
   type = getPostTypeFromBody(micropubDocument.properties);
 
   // Meta
   meta = getPostMetaFromProperties(micropubDocument.properties);
+
+  // Permalink
+  // TODO: Check if published in future and update the slug  
+  // For now its just the current date
+  let now = new Date();
+  const date = now.toISOString().split('T')[0].replaceAll('-', '/');
+  permalink = `/${date}/${slug}`;
 
   let post = {
     name,
@@ -91,7 +100,8 @@ const processMicropubDocument = (micropubDocument) => {
     categories,
     slug,
     type,
-    meta
+    meta,
+    permalink
   }
 
   // Handle any media  
