@@ -8,6 +8,7 @@ const md = new MarkdownIt({
   typographer: true
 });
 const { convert } = require('html-to-text');
+const logger = require('../config/logger');
 
 const processMicropubDocument = (micropubDocument) => {
   let name = '';
@@ -34,15 +35,17 @@ const processMicropubDocument = (micropubDocument) => {
     } else {
       content_text = c;
     }
+
     if (typeof content === 'string') {
       content_text = content;
       content_md = content_text;
       content_html = md.render(content_md);
     } else if (typeof content === 'object') {
+      logger.info('content is object');
       if (content.html) {
-        content_html = content.html;
+        content_html = decodeURIComponent(content.html);
         content_md = NodeHtmlMarkdown.translate(content_html);
-        convert(content_html, {
+        content_text = convert(content_html, {
           wordwrap: 130
         });
       }
@@ -65,7 +68,7 @@ const processMicropubDocument = (micropubDocument) => {
     status = micropubDocument.properties['post-status'][0];
   }
 
-  // Categories
+  // Tags
   if (micropubDocument.properties.category &&
     micropubDocument.properties.category.length) {
     categories = micropubDocument.properties.category;
@@ -92,12 +95,12 @@ const processMicropubDocument = (micropubDocument) => {
   permalink = `/${date}/${slug}`;
 
   let post = {
-    name,
-    content_html,
-    content_md,
-    content_text,
+    title: name,
+    html: content_html,
+    content: content_md,
+    text: content_text,
     status,
-    categories,
+    tags: categories.join(','),
     slug,
     type,
     meta,

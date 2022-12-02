@@ -1,0 +1,26 @@
+<html>
+
+<head>
+  <link rel="authorization_endpoint" href="https://brandon_swoop.ngrok.io/indieWeb/indieAuth/authorize">
+  <link rel="token_endpoint" href="https://brandon_swoop.ngrok.io/indieWeb/indieAuth/token">
+  <link rel="micropub" href="https://brandon_swoop.ngrok.io/indieWeb/micropub">
+  <link rel="webmention" href="https://brandon_swoop.ngrok.io/indieWeb/webmentions/receive">
+  <title>
+    <%- blog.title %>
+  </title>
+</head>
+
+<body>
+  <!-- h-card for the author -->
+  <div class="h-card">
+    <a class="p-name u-url" href="<%- blog.url %>">
+      <%- blog.user.display_name || blog.user.username %>
+    </a>
+    <img class="u-photo" src="<%- blog.user.avatar || blog.user.gravatar %>" alt="">
+    <p class="p-note">
+      <%- blog.user.note %>
+    </p>
+  </div>
+</body>
+
+</html>

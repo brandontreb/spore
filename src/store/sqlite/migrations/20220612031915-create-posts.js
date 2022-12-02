@@ -1,51 +1,66 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Blogs', {
+    await queryInterface.createTable('Posts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      uri: {
+        type: Sequelize.STRING
+      },
+      blog_id: {
+        type: Sequelize.INTEGER
+      },
+      user_id: {
+        type: Sequelize.INTEGER
+      },
       title: {
         type: Sequelize.STRING
       },
-      url: {
+      content: {
+        type: Sequelize.TEXT
+      },
+      text: {
+        type: Sequelize.TEXT
+      },
+      html: {
+        type: Sequelize.TEXT
+      },
+      status: {
+        type: Sequelize.ENUM('draft', 'published', 'future', 'private', 'trash')
+      },
+      slug: {
         type: Sequelize.STRING
       },
-      homepage_content: {
-        type: Sequelize.TEXT
-      },
-      homepage_content_html: {
-        type: Sequelize.TEXT
+      permalink: {
+        type: Sequelize.STRING
       },
       meta_description: {
-        type: Sequelize.TEXT
-      },
-      nav: {
-        type: Sequelize.TEXT
-      },
-      nav_html: {
-        type: Sequelize.TEXT
-      },
-      language: {
-        type: Sequelize.STRING
-      },
-      favicon: {
         type: Sequelize.STRING
       },
       meta_image_url: {
         type: Sequelize.STRING
       },
-      external_stylesheet_url: {
+      tags: {
         type: Sequelize.STRING
       },
-      custom_styles: {
-        type: Sequelize.TEXT
+      type: {
+        type: Sequelize.STRING
       },
-      overwrite_styles: {
-        type: Sequelize.BOOLEAN
+      webmention_count: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+      show_in_feed: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
+      },
+      published_date: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
       createdAt: {
         allowNull: false,
@@ -58,6 +73,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Blogs');
+    await queryInterface.dropTable('Posts');
   }
 };

@@ -3,12 +3,12 @@ const catchAsync = require('../../utils/catchAsync');
 const httpStatus = require('http-status');
 const ApiError = require('../../utils/ApiError');
 const logger = require('../../config/logger');
-const { indieWebService } = require('../../services');
-const SporeStore = require('../../store');
+const { indieWebService, postService } = require('../../services');
+// const SporeStore = require('../../store');
 
 const create = catchAsync(async(req, res, next) => {
   let { body, query } = req;
-  let blog = config.blog;
+  let blog = res.locals.blog;
 
   // check if get request
   if (req.method === 'GET' && req.query['q'] === 'config') {
@@ -35,11 +35,17 @@ const create = catchAsync(async(req, res, next) => {
       body = indieWebService.processFormEncodedBody(req.body);
     }
   }
-  logger.info('Micropub request: %j', body);
 
   let post = indieWebService.processMicropubDocument(body);
 
-  let postObj = await SporeStore.savePost({...post, _raw: raw });
+  post = {
+    ...post,
+    raw: raw,
+    blog_id: blog.id,
+    user_id: blog.user.id
+  }
+
+  let postObj = await postService.savePost(post);
 
   res.set('Location', `${blog.url}${postObj.permalink}`).status(httpStatus.CREATED).send();
 });
