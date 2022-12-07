@@ -57,8 +57,9 @@ const approve = async(req, res) => {
   }
 
   await SporeStore.saveOAuthRequest(indieAuthRequestBody);
-
-  res.redirect(`${redirect_uri}?code=${code}&state=${state}&me=${encodeURIComponent(blog.url)}`);
+  let redirectUri = `${redirect_uri}?code=${code}&state=${state}&me=${encodeURIComponent(blog.url)}`;
+  logger.debug('redirectUri: %s', redirectUri);
+  res.redirect(redirectUri);
 }
 
 const token = async(req, res) => {
@@ -143,11 +144,11 @@ const token = async(req, res) => {
   });
 }
 
-/*
-const verifyToken = async (req, res) => {
+
+const verifyToken = async(req, res) => {
   let token = req.headers.authorization;
 
-  if(!token) {
+  if (!token) {
     return res.status(400).json({
       error: 'invalid_request',
       error_description: 'token+parameter+absent'
@@ -157,27 +158,28 @@ const verifyToken = async (req, res) => {
   token = token.split(' ')[1];
 
   try {
-    let {tokenInfo, payload} = await tokenService.verifyToken(token);
-    if(!tokenInfo) {
+    const tokenDoc = await tokenService.verifyToken(token);
+    if (!tokenDoc) {
       return res.status(400).json({
         error: 'invalid_request',
         error_description: 'invalid+token'
       });
     }
 
-    res.json({        
-      ...payload,
-    }); 
+    res.json({
+      ...tokenDoc,
+    });
   } catch (error) {
     res.status(400).json({
       error: 'invalid_request',
       error_description: 'invalid+token'
     });
   }
-};*/
+};
 
 module.exports = {
   authorize,
   approve,
-  token
+  token,
+  verifyToken
 }

@@ -7,7 +7,11 @@ module.exports = class ISporeStore {
     throw new Error('Not implemented')
   }
 
-  savePost(post) {
+  createPost(post) {
+    throw new Error('Not implemented')
+  }
+
+  createMedia(media) {
     throw new Error('Not implemented')
   }
 }

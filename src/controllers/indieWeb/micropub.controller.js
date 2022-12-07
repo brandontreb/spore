@@ -3,7 +3,7 @@ const catchAsync = require('../../utils/catchAsync');
 const httpStatus = require('http-status');
 const ApiError = require('../../utils/ApiError');
 const logger = require('../../config/logger');
-const { indieWebService, postService } = require('../../services');
+const { indieWebService, postService, mediaService } = require('../../services');
 // const SporeStore = require('../../store');
 
 const create = catchAsync(async(req, res, next) => {
@@ -13,7 +13,7 @@ const create = catchAsync(async(req, res, next) => {
   // check if get request
   if (req.method === 'GET' && req.query['q'] === 'config') {
     return res.json({
-      "media-endpoint": `${blog.url}/micropub/media`,
+      "media-endpoint": `${blog.url}/indieWeb/micropub/media`,
       "syndicate-to": []
     });
   }
@@ -25,7 +25,7 @@ const create = catchAsync(async(req, res, next) => {
 
   let raw = JSON.stringify(body);
 
-  logger.info('raw body: %j', body);
+  logger.info('micropub request: %j', body);
 
   // Check the body type and process accordingly
   if (body) {
@@ -45,7 +45,7 @@ const create = catchAsync(async(req, res, next) => {
     user_id: blog.user.id
   }
 
-  let postObj = await postService.savePost(post);
+  let postObj = await postService.createPost(post);
 
   res.set('Location', `${blog.url}${postObj.permalink}`).status(httpStatus.CREATED).send();
 });
@@ -62,18 +62,18 @@ const media = catchAsync(async(req, res, next) => {
   for (let file of req.files.file) {
     let mediaBody = {
       type: 'image', // TODO: Hardcoded for now, update when more media supported
-      originalFilename: file.originalname,
+      original_filename: file.originalname,
       path: file.path,
-      mimeType: file.mimetype,
+      mime_type: file.mimetype,
       filename: file.filename,
       size: file.size
     };
 
-    let media = await SporeStore.saveMedia(mediaBody);
+    let media = await mediaService.createMedia(mediaBody);
 
     response.push({
       url: `${blog.url}/${media.path}`,
-      mime_type: media.mimeType,
+      mime_type: media.mime_type,
       published: media.createdAt
     })
   }

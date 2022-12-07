@@ -29,10 +29,16 @@ module.exports = (sequelize, DataTypes) => {
         as: 'blog'
       });
 
-      // this.hasMany(models.Media, {
-      //   foreignKey: 'post_id',
-      //   as: 'media'
-      // });
+      this.hasMany(models.Media, {
+        foreignKey: 'post_id',
+        as: 'media'
+      });
+
+      this.belongsToMany(models.Tags, {
+        through: "Post_Tags",
+        foreignKey: 'post_id',
+        as: 'tags'
+      });
 
       // this.hasMany(models.PostMeta, {
       //   foreignKey: 'post_id',
@@ -83,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
     meta_image_url: {
       type: DataTypes.STRING
     },
-    tags: {
+    tags_csv: {
       type: DataTypes.STRING
     },
     type: {

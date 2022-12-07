@@ -26,6 +26,8 @@ const SporeStore = class SporeStore extends ISporeStore {
   }
 
   // Media
+
+  /*
   async saveMedia(media) {
     logger.info('Saving media: %j', media);
     DB().insert('media', media);
@@ -57,8 +59,9 @@ const SporeStore = class SporeStore extends ISporeStore {
     let row = DB().queryFirstRow('SELECT * FROM media WHERE id = ?', media.id);
     return row;
   }
+  */
 
-  async savePost(postDoc) {
+  async createPost(postDoc) {
       logger.debug('Saving post to the database: %j', postDoc);
       let post = await this.db.Posts.create(postDoc);
       return post;
@@ -140,16 +143,146 @@ const SporeStore = class SporeStore extends ISporeStore {
         return postObj;
       }
     */
-  getPostByPermalink = async(permalink) => {
-    logger.debug('Getting post from the database: %s', permalink);
-    let row = DB().queryFirstRow('SELECT * FROM posts WHERE permalink = ?', permalink);
-    if (row) {
-      return row;
+  queryPosts = async(filter, options) => {
+    if (!options) {
+      options = {};
     }
-    return null;
+    if (!options.include) {
+      options.include = [];
+    } else if (!typeof options.include === 'array') {
+      options.include = [options.include];
+    }
+
+    let posts = await this.db.Posts.findAll({
+      where: filter,
+      ...options,
+    });
+    return posts;
+  };
+
+  getPostById = async(id, include = ["media", "blog", "post_meta"]) => {
+    let post = await this.db.Posts.findOne({
+      where: {
+        id,
+      },
+      include: include
+    });
+    return post;
   }
 
-  saveBlogMeta = async(meta) => {
+  getPostBySlug = async(slug, include = ["media", "blog", "post_meta"]) => {
+    let post = await this.db.Posts.findOne({
+      where: {
+        slug,
+      },
+      include: include
+    });
+    return post;
+  }
+
+  getPostByPermalink = async(permalink, include = ["media", "blog", "post_meta"]) => {
+    let post = await this.db.Posts.findOne({
+      where: {
+        permalink,
+      },
+      include: include
+    });
+    return post;
+  }
+
+  /**
+   * Media
+   *  
+   */
+
+  createMedia = async(media) => {
+    logger.debug('Saving media to the database: %j', media);
+    let mediaObj = await this.db.Media.create(media);
+    return mediaObj;
+  };
+
+  getMediaById = async(id) => {
+    let media = await this.db.Media.findOne({
+      where: {
+        id,
+      },
+    });
+    return media;
+  };
+
+  getMediaByFilename = async(filename) => {
+    let media = await this.db.Media.findOne({
+      where: {
+        filename,
+      },
+    });
+    return media;
+  };
+
+  updateMedia = async(id, media) => {
+    logger.debug('Updating media in the database: %j', media);
+    let mediaObj = await this.db.Media.update(media, {
+      where: {
+        id: id,
+      },
+    });
+    return mediaObj;
+  };
+
+  queryMedia = async(filter, options) => {
+    if (!options) {
+      options = {};
+    }
+    if (!options.include) {
+      options.include = [];
+    } else if (!typeof options.include === 'array') {
+      options.include = [options.include];
+    }
+
+    let media = await this.db.Media.findAll({
+      where: filter,
+      ...options,
+    });
+    return media;
+  };
+
+  /**
+   * Tags    
+   */
+
+  createTag = async(tag) => {
+    logger.debug('Saving tag to the database: %j', tag);
+    let existingTag = await this.db.Tags.findOne({
+      where: {
+        slug: tag.slug,
+      },
+    });
+    if (existingTag) {
+      return existingTag;
+    }
+    let tagObj = await this.db.Tags.create(tag);
+    return tagObj;
+  };
+
+  createPostTag = async(postId, tagId) => {
+    logger.debug('Saving tag to post to the database: %j,  %j', postId, tagId);
+    let existingPostTag = await this.db.Post_Tags.findOne({
+      where: {
+        tag_id: tagId,
+        post_id: postId,
+      },
+    });
+    if (existingPostTag) {
+      return existingPostTag;
+    }
+    let postTag = await this.db.Post_Tags.create({
+      tag_id: tagId,
+      post_id: postId,
+    });
+    return postTag;
+  };
+
+  /*saveBlogMeta = async(meta) => {
     logger.debug('Saving blog meta to the database: %j', meta);
     if (meta) {
       for (let key in meta) {
@@ -209,7 +342,7 @@ const SporeStore = class SporeStore extends ISporeStore {
       }
       return null;
     }
-  }
+  }*/
 
   /**
    * Blog Methods

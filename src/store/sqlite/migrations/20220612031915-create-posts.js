@@ -44,7 +44,7 @@ module.exports = {
       meta_image_url: {
         type: Sequelize.STRING
       },
-      tags: {
+      tags_csv: {
         type: Sequelize.STRING
       },
       type: {

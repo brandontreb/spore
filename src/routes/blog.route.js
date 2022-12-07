@@ -5,6 +5,7 @@ const { blogController } = require('../controllers');
 const router = express.Router();
 
 router.route('/').get(auth(false), blogController.index)
-router.route('/*').get(auth(false), blogController.post)
+router.route('/:slug').get(auth(false), blogController.getPost)
+router.get('/:year?/:month?/:day?/:slug', auth(false), blogController.getPost);
 
 module.exports = router;

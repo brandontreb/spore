@@ -1,0 +1,19 @@
+<article class="h-entry post">
+  <header>
+    <% if (post.title) { %>
+      <h1 class="p-name">
+        <%= post.title %>
+      </h1>
+      <% } %>
+        <h2 class="headline">
+          <time class="dt-published" datetime="2022-12-02 15:53:13 -0600">
+        <!-- <a class="u-url dates" href="https://www.manton.org/2022/12/02/on-the-latest.html">Dec 2, 2022</a> -->
+      </time>
+        </h2>
+  </header>
+  <section class="e-content post-body">
+    <%- post.html %>
+      <p class="conversation_div"></p>
+  </section>
+  <%- include('./_hcard.ejs', blog) %>
+</article>

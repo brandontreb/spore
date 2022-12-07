@@ -23,7 +23,7 @@ const download = async(url, path) => {
 
     let media = {
       type: 'image',
-      mimetype: response.headers['content-type'],
+      mime_type: response.headers['content-type'],
       size: response.headers['content-length'],
       originalname: path.split('/').pop(),
       filename: path.split('/').pop(),
@@ -127,7 +127,7 @@ const importMarkdown = async(name, markdown) => {
 
   let post;
   try {
-    post = await SporeStore.savePost(postObject);
+    post = await SporeStore.createPost(postObject);
   } catch (e) {
     console.log(e);
   }
@@ -154,11 +154,11 @@ const associateMediaFilesWithPost = async(post, mediaFiles) => {
   if (mediaFiles) {
     mediaFiles.forEach(async(media) => {
       let mediaBody = {
-        postId: post.id,
+        post_id: post.id,
         type: 'image', // TODO: Hardcoded for now, update when more media supported
-        originalFilename: media.originalname,
+        original_filename: media.originalname,
         path: media.path,
-        mimeType: media.mimetype,
+        mime_type: media.mime_type,
         filename: media.filename,
         size: media.size
       };

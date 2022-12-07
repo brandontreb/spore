@@ -21,6 +21,8 @@ const processMicropubDocument = (micropubDocument) => {
   let type = 'note';
   let permalink = '';
 
+  logger.info('micropubDocument', micropubDocument);
+
   // Title
   if (micropubDocument.properties.name) {
     name = micropubDocument.properties.name[0];
@@ -43,7 +45,7 @@ const processMicropubDocument = (micropubDocument) => {
     } else if (typeof content === 'object') {
       logger.info('content is object');
       if (content.html) {
-        content_html = decodeURIComponent(content.html);
+        content_html = decodeURIComponent(content.html.replace(/\\/g, ''));
         content_md = NodeHtmlMarkdown.translate(content_html);
         content_text = convert(content_html, {
           wordwrap: 130
@@ -51,8 +53,8 @@ const processMicropubDocument = (micropubDocument) => {
       }
 
       if (content.value) {
-        content_text = content.value;
-        content_md = content.value;
+        content_text = content.value.replace(/\\/g, '');
+        content_md = content.value.replace(/\\/g, '');
         content_html = md.render(content_md);
       }
     }
