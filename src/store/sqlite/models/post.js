@@ -40,10 +40,10 @@ module.exports = (sequelize, DataTypes) => {
         as: 'tags'
       });
 
-      // this.hasMany(models.PostMeta, {
-      //   foreignKey: 'post_id',
-      //   as: 'post_meta'
-      // });
+      this.hasMany(models.Post_Meta, {
+        foreignKey: 'post_id',
+        as: 'post_meta'
+      });
     }
   }
   Posts.init({

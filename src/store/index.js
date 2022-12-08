@@ -282,6 +282,59 @@ const SporeStore = class SporeStore extends ISporeStore {
     return postTag;
   };
 
+  /**
+   * PostMeta
+   **/
+  createPostMeta = async(postId, meta) => {
+    logger.debug('Saving post meta to the database: %j', meta);
+    if (meta && meta.value && (meta.key || meta.name)) {
+      let key = meta.key || meta.name;
+      let value = meta.value;
+
+      if (typeof value === 'object') {
+        // Single item arrays get squashed
+        // Multi item arrays get stored as CSV
+        if (Array.isArray(value)) {
+          if (value.length > 1) {
+            value = JSON.stringify(value);
+          } else {
+            value = value[0];
+          }
+        } else {
+          // Objects are stored as JSON
+          value = JSON.stringify(value);
+        }
+      }
+      let postMeta = await this.db.Post_Meta.create({
+        post_id: postId,
+        name: key,
+        value,
+      });
+      return postMeta
+    }
+    return null;
+  };
+
+  getPostMeta = async(postId, key = null) => {
+    let postMeta = null;
+    if (key) {
+      postMeta = await this.db.Post_Meta.findOne({
+        where: {
+          post_id: postId,
+          name: key,
+        },
+      });
+    } else {
+      postMeta = await this.db.Post_Meta.findAll({
+        where: {
+          post_id: postId,
+        },
+      });
+    }
+    return postMeta;
+  };
+
+
   /*saveBlogMeta = async(meta) => {
     logger.debug('Saving blog meta to the database: %j', meta);
     if (meta) {

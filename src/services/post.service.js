@@ -63,6 +63,18 @@ const createPost = async(postDoc) => {
     }
   }
 
+  // Save meta
+  logger.debug('Saving meta: %j', meta);
+  if (meta && typeof meta === 'object' && Object.keys(meta).length) {
+    for (let key in meta) {
+      let metaDoc = {
+        key: key,
+        value: meta[key]
+      };
+      await SporeStore.createPostMeta(post.id, metaDoc);
+    }
+  }
+
   return post;
 }
 
