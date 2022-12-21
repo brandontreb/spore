@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const { postService } = require('../services');
 const logger = require('../config/logger');
+const { Op } = require('sequelize');
 
 const index = catchAsync(async(req, res) => {
   let page = res.locals.page;
@@ -8,6 +9,10 @@ const index = catchAsync(async(req, res) => {
   let posts = await postService.queryPosts({
     blog_id: res.locals.blog.id,
     status: 'published',
+    // show only notes and articles
+    type: {
+      [Op.not]: ['reply']
+    }
   }, {
     order: [
       ['published_date', 'DESC']

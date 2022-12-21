@@ -150,6 +150,25 @@ module.exports = (sequelize, DataTypes) => {
         return `${this.blog.url}${slash}${this.permalink}`;
       }
     },
+    html_with_media: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        let content = this.html;
+
+        if (this.media) {
+          for (let media of this.media) {
+            content = `${content}\n\n<p><img class="u-photo" src="${this.blog.url}/${media.path}" alt="${media.alt_text || ""}"></p>`;
+          }
+        }
+        return md.render(content);
+      },
+    },
+    html_with_media_encoded: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return encode(this.html_with_media);
+      },
+    },
   }, {
     sequelize,
     modelName: 'Posts',

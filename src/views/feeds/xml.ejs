@@ -1,0 +1,21 @@
+<rss version="2.0">
+  <link href="<%- blog.url %>/feeds/rss" rel="self" type="application/rss+xml" />
+<channel>
+  <title><%- blog.title %></title>
+  <link><%- blog.url %></link>
+  <description><%- blog.meta_description %></description>
+  <language>en-us</language>
+  <pubDate>Tue, 10 Jun 2003 04:00:00 GMT</pubDate>
+  <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>    
+  <generator>spore.blog 1.0</generator>
+  <% posts.forEach(post => { %>
+    <item>
+      <title><%- post.title %></title>
+      <link><%- post.url %></link>
+      <description><%- post.html_with_media_encoded %></description>
+      <pubDate><%- post.published_date_formatted_rss %></pubDate>
+      <guid><%- post.url %></guid>
+  </item>
+  <% }); %>
+</channel>
+</rss>
