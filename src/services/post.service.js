@@ -75,6 +75,8 @@ const createPost = async(postDoc) => {
     }
   }
 
+  post = await SporeStore.getPostById(post.id);
+
   return post;
 }
 

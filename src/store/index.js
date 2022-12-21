@@ -63,7 +63,11 @@ const SporeStore = class SporeStore extends ISporeStore {
 
   async createPost(postDoc) {
     logger.debug('Saving post to the database: %j', postDoc);
-    let post = await this.db.Posts.create(postDoc);
+    let post = await this.db.Posts.create(postDoc,
+
+      {
+        include: ["media", "blog", "post_meta", "tags"]
+      })
     return post;
   }
 

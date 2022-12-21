@@ -1744,7 +1744,7 @@ cheerio-select@^2.1.0:
     domhandler "^5.0.3"
     domutils "^3.0.1"
 
-cheerio@^1.0.0-rc.12:
+cheerio@^1.0.0-rc.12, cheerio@^1.0.0-rc.2:
   version "1.0.0-rc.12"
   resolved "https://registry.yarnpkg.com/cheerio/-/cheerio-1.0.0-rc.12.tgz#788bf7466506b1c6bf5fae51d24a2c4d62e47683"
   integrity sha512-VqR8m68vM46BNnuZ5NtnGBKIE/DfN0cRIzg9n40EIq9NOv90ayxLBXA8fXC5gquFRGJSTRqBq25Jt2ECLR431Q==
@@ -2003,7 +2003,7 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-concat-stream@^1.5.2:
+concat-stream@^1.5.2, concat-stream@^1.6.0:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.2.tgz#904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
   integrity sha512-27HBghJxjiZtIk3Ycvn/4kbJk/1uZuJFfuPEns6LaEvpvG1f0hTea8lilrouyo9mVc2GWdcEZ8OLoGmSADlrCw==
@@ -2720,6 +2720,11 @@ es6-weak-map@^2.0.3:
     es6-iterator "^2.0.3"
     es6-symbol "^3.1.1"
 
+es7-array.prototype.includes@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/es7-array.prototype.includes/-/es7-array.prototype.includes-2.0.0.tgz#0e23aa5238bbe2e7b23255492ef92f45b8aaa46a"
+  integrity sha512-hvbywu1ogBb1jcT1BgKZ000FHvvONFpUIPiw3g5DFg8joHXU2pyeoKU1i1wbZ4C771fwiqREHPa2GeZtCZ1Uww==
+
 escalade@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.1.1.tgz#d8cfdc7000965c5a0174b4a82eaa5c0552742e40"
@@ -3353,7 +3358,7 @@ follow-redirects@^1.10.0:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.1.tgz#d9114ded0a1cfdd334e164e6662ad02bfd91ff43"
   integrity sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==
 
-follow-redirects@^1.15.0:
+follow-redirects@^1.15.0, follow-redirects@^1.2.5:
   version "1.15.2"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
@@ -3394,6 +3399,11 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
+
+form-urlencoded@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/form-urlencoded/-/form-urlencoded-3.0.2.tgz#28181fabc31b263662d6fc9c2e9700af35b2a860"
+  integrity sha512-FurPsZ7yfmbX+Vl9ibn/PK5EkeScj/inKtCqx9vc9EOlzh6p6VhanfeIjtDk/kCGrWVbCVW8M3GA7zX3udmgHw==
 
 formidable@^1.2.2:
   version "1.2.2"
@@ -3576,6 +3586,18 @@ get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=
+
+get-webmention-url@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/get-webmention-url/-/get-webmention-url-2.0.0.tgz#d5167350b53cfe53aa0b2f3168ccc217b01d990c"
+  integrity sha512-OUszlsTv+NfaY/q2VBDcJ8SjBgU07q13oP594swWJ5whnmShhFB21hSQANLdtxSG61w2NKrw86RHlBiHzfu8FQ==
+  dependencies:
+    cheerio "^1.0.0-rc.2"
+    concat-stream "^1.6.0"
+    es7-array.prototype.includes "^2.0.0"
+    follow-redirects "^1.2.5"
+    li "^1.2.1"
+    lodash.compact "^3.0.1"
 
 getpass@^0.1.1:
   version "0.1.7"
@@ -5087,6 +5109,11 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+li@^1.2.1:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/li/-/li-1.3.0.tgz#22c59bcaefaa9a8ef359cf759784e4bf106aea1b"
+  integrity sha512-z34TU6GlMram52Tss5mt1m//ifRIpKH5Dqm7yUVOdHI+BQCs9qGPHFaCUTIzsWX7edN30aa2WrPwR7IO10FHaw==
+
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
@@ -5162,6 +5189,11 @@ lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
   integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
+lodash.compact@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.compact/-/lodash.compact-3.0.1.tgz#540ce3837745975807471e16b4a2ba21e7256ca5"
+  integrity sha512-2ozeiPi+5eBXW1CLtzjk8XQFhQOEMwwfxblqeq6EGyTxZJ1bPATqilY0e6g2SLQpP4KuMeuioBhEnWz5Pr7ICQ==
 
 lodash.escape@^4.0.1:
   version "4.0.1"
@@ -7146,6 +7178,14 @@ semver@~7.2.0:
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.2.3.tgz#3641217233c6382173c76bf2c7ecd1e1c16b0d8a"
   integrity sha512-utbW9Z7ZxVvwiIWkdOMLOR9G/NFXh2aRucghkVrEMJWuC++r3lCkBC3LwqBinyHzGMAJxY5tn6VakZGHObq5ig==
+
+send-webmention@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/send-webmention/-/send-webmention-2.0.0.tgz#6f38ecb31ce76e8ff072d253c542ff8eb50c4f7a"
+  integrity sha512-qKfkyLnVuv9MYWLMvhPRk+cDZkzLk0mYqn5jFK7miKcIF8QUGXJaIrDXYqou8epkSnQ2QiWCMo1FRB/b9ZZaEA==
+  dependencies:
+    form-urlencoded "^3.0.0"
+    get-webmention-url "^2.0.0"
 
 send@0.17.1:
   version "0.17.1"

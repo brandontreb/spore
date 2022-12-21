@@ -43,7 +43,29 @@ const getPost = catchAsync(async(req, res) => {
   res.render('pages/single', locals);
 });
 
+const getReplies = catchAsync(async(req, res) => {
+  logger.info('getReplies');
+  let blog = res.locals.blog;
+  let posts = await postService.queryPosts({
+    blog_id: blog.id,
+    status: 'published',
+    type: 'reply'
+  }, {
+    order: [
+      ['published_date', 'DESC']
+    ],
+    limit: 25,
+    offset: (res.locals.page - 1) * 25
+  });
+  res.render('pages/replies', {
+    title: `Replies | ${blog.title}`,
+    posts,
+    blog
+  });
+});
+
 module.exports = {
   index,
-  getPost
+  getPost,
+  getReplies
 }

@@ -9,6 +9,8 @@ const md = new MarkdownIt({
 });
 const { convert } = require('html-to-text');
 const logger = require('../config/logger');
+const webmention = require('send-webmention');
+const config = require('../config/config');
 
 const processMicropubDocument = (micropubDocument) => {
   let name = '';
@@ -290,10 +292,26 @@ const cleanEmptyKeys = function(result) {
  */
 const ensureArrayAndCloneIt = (value) => Array.isArray(value) ? [...value] : [value];
 
+const sendWebmentions = async(source, targets) => {
+  logger.debug(`Sending webmentions from ${source} to ${targets}`);
+  targets.forEach(async(target) => {
+    webmention(source, target, `${config.name}/${config.version}`, function(err, obj) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      if (obj.success) {
+        console.log(`Sending webmention to ${target}. Success!`);
+      } else {
+        console.log('Failure :(');
+      }
+    });
+  });
+}
 
 module.exports = {
   processJsonEncodedBody,
   processFormEncodedBody,
   processMicropubDocument,
-
+  sendWebmentions
 };

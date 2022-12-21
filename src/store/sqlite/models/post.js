@@ -131,9 +131,11 @@ module.exports = (sequelize, DataTypes) => {
 
         if (this.type === 'reply') {
           let meta = this.post_meta;
-          let reply = meta.find(m => m.name === 'in-reply-to');
-          if (reply) {
-            links.push(reply.value);
+          if (meta) {
+            let reply = meta.find(m => m.name === 'in-reply-to');
+            if (reply) {
+              links.push(reply.value);
+            }
           }
         }
 

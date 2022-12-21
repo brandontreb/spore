@@ -46,8 +46,10 @@ const create = catchAsync(async(req, res, next) => {
   }
 
   let postObj = await postService.createPost(post);
+  let url = `${blog.url}${postObj.permalink}`;
+  await indieWebService.sendWebmentions(url, postObj.links);
 
-  res.set('Location', `${blog.url}${postObj.permalink}`).status(httpStatus.CREATED).send();
+  res.set('Location', `${url}`).status(httpStatus.CREATED).send();
 });
 
 // Create and endpoint called media that allows uploads
