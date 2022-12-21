@@ -6,7 +6,7 @@
     "host": "localhost",
     "dialect": "sqlite",
     "storage": "./data/spore.sqlite3",
-    "logging": false
+    "logging": true
   },
   "test": {
     "username": "root",
@@ -16,11 +16,12 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
+    "username": null,
     "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
+    "database": "main",
+    "host": "localhost",
+    "dialect": "sqlite",
+    "storage": "./data/spore.sqlite3",
     "logging": false
   }
 }

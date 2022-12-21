@@ -80,6 +80,9 @@ if (config.env === 'production') {
 // Static files
 app.use(express.static('public'))
 app.use('/data/uploads', express.static('data/uploads'))
+app.get('/data/themes/:name/:name.css', (req, res) => {
+  res.sendFile(`/data/themes/${req.params.name}/${req.params.name}.css`, { root: './' });
+});
 
 // testing
 app.use('/api/v1', apiRoutes);

@@ -4,6 +4,7 @@ const md = new MarkdownIt({
   linkify: true,
   typographer: true
 });
+const HTMLDecoderEncoder = require("html-encoder-decoder");
 
 const normalizeUrl = (url) => {
   url = url.trim();
@@ -34,7 +35,9 @@ const getGravatar = (email) => {
 };
 
 const markdownToHtml = (markdown) => {
-  return md.render(markdown);
+  let decoded = HTMLDecoderEncoder.decode(markdown);
+  console.log(decoded);
+  return md.render(decoded);
 };
 
 module.exports = {
@@ -42,5 +45,5 @@ module.exports = {
   slugify,
   getGravatar,
   markdownToHtml,
-  nakedUrl
+  nakedUrl,
 }

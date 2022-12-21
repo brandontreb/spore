@@ -1,6 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const AdmZip = require("adm-zip");
-const { importService } = require('../services');
+const { importService, postService } = require('../services');
 
 const index = catchAsync(async(req, res) => {
   res.render('admin/pages/import', {
@@ -9,6 +9,7 @@ const index = catchAsync(async(req, res) => {
 });
 
 const markdown = catchAsync(async(req, res) => {
+  let blog = res.locals.blog;
   let file = req.file;
   let zip = new AdmZip(file.buffer);
   let zipEntries = zip.getEntries();
@@ -16,13 +17,15 @@ const markdown = catchAsync(async(req, res) => {
     let entry = zipEntries[i];
     let name = entry.entryName;
     let content = entry.getData().toString("utf8");
-    await importService.importMarkdown(name, content);
+    let postObj = await importService.importMarkdown(name, content);
+
+    postObj.blog_id = blog.id;
+    postObj.user_id = blog.user.id;
+    let photo = postObj.media.photo;
+    delete postObj.media;
+    let post = await postService.createPost(postObj);
+    await importService.associateMediaFilesWithPost(post, photo);
   }
-  // zipEntries.forEach(async(zipEntry) => {
-  //   let name = zipEntry.entryName;
-  //   let content = zipEntry.getData().toString("utf8");
-  //   await importService.importMarkdown(name, content);    
-  // });
   res.flash('success', 'Imported markdown files');
   res.redirect('/admin/import');
 });

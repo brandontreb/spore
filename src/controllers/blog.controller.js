@@ -3,12 +3,28 @@ const { postService } = require('../services');
 const logger = require('../config/logger');
 
 const index = catchAsync(async(req, res) => {
-  res.render('pages/index');
+  let page = res.locals.page;
+
+  let posts = await postService.queryPosts({
+    blog_id: res.locals.blog.id,
+    status: 'published',
+  }, {
+    order: [
+      ['published_date', 'DESC']
+    ],
+    limit: 25,
+    offset: (page - 1) * 25
+  });
+  res.render('pages/index', {
+    title: res.locals.blog.title,
+    posts: posts,
+    ...res.locals
+  });
 });
 
 const getPost = catchAsync(async(req, res) => {
+  let blog = res.locals.blog;
   let slug = req.params.slug;
-  logger.debug('Getting post with slug: %s', slug);
   let post = await postService.getPostBySlug(slug);
 
   // If the post is not published, redirect to the blog page
@@ -24,7 +40,7 @@ const getPost = catchAsync(async(req, res) => {
     ...res.locals
   }
 
-  res.render('pages/post', locals);
+  res.render('pages/single', locals);
 });
 
 module.exports = {

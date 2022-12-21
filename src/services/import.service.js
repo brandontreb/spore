@@ -85,7 +85,7 @@ const importMarkdown = async(name, markdown) => {
     postTags = Object.values(frontMatter.attributes.tags).join(',');
   }
   let tags = [
-    postTags ? postTags.split(',').map(tag => tag.trim()) : "",
+    postTags ? postTags.split(' ').map(tag => tag.trim()) : "",
     postCategories ? postCategories.split(',').map(category => category.trim()) : ""
   ];
   // remove empty tags
@@ -113,24 +113,25 @@ const importMarkdown = async(name, markdown) => {
   }
 
   postObject = {
-    name: title,
-    categories: tags.split(','),
+    title,
+    tags: tags,
     slug: slug,
     permalink: permalink,
-    content_md: postContent,
-    content_html: md.render(postContent),
-    content_text: markdownToTxt(postContent),
+    content: postContent,
+    html: md.render(postContent),
+    text: markdownToTxt(postContent),
     status: 'published',
     type: type,
-    published: moment(published).format('YYYY-MM-DD HH:mm:ss'),
-  }
+    published_date: moment(published).format('YYYY-MM-DD HH:mm:ss'),
+    media: {}
+  };
 
-  let post;
-  try {
-    post = await SporeStore.createPost(postObject);
-  } catch (e) {
-    console.log(e);
-  }
+  // let post;
+  // try {
+  //   post = await SporeStore.createPost(postObject);
+  // } catch (e) {
+  //   console.log(e);
+  // }
 
   // Download the media files
 
@@ -140,13 +141,16 @@ const importMarkdown = async(name, markdown) => {
       const pathRegex = new RegExp(/\.\.\/\.\.\/(.*)/, "g");
       const match = pathRegex.exec(media.path);
       media.path = match[1];
-      media.post_id = post ? post.id : 1;
-      await associateMediaFilesWithPost(post, [media]);
-      console.log(media);
+      // media.post_id = post ? post.id : 1;
+      // await associateMediaFilesWithPost(post, [media]);
+      // console.log(media);
+      postObject.media.photo = [media];
     } else {
       logger.debug(`Could not download media file ${photo[0]}`);
     }
   }
+
+  return postObject;
 };
 
 const associateMediaFilesWithPost = async(post, mediaFiles) => {
@@ -162,12 +166,13 @@ const associateMediaFilesWithPost = async(post, mediaFiles) => {
         filename: media.filename,
         size: media.size
       };
-      await SporeStore.saveMedia(mediaBody);
+      await SporeStore.createMedia(mediaBody);
     });
   }
 }
 
 module.exports = {
   downloadMediaFile,
-  importMarkdown
+  importMarkdown,
+  associateMediaFilesWithPost
 }

@@ -25,9 +25,29 @@ const auth = (required) => async(req, res, next) => {
   }
 
   // Hydrate the locals with the blog/user data
+
+  let theme = {
+    name: 'default',
+    slug: 'default',
+  }
+
+  theme.head = `  
+    <link rel="alternate" type="application/json" title="${blog.user.username}" href="${blog.url}/feed.json" />
+    <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+    <link rel="stylesheet" href="/data/themes/${theme.slug}/${theme.slug}.css">
+    <link rel="me" href="mailto:${blog.user.email}">    
+    <!-- Indie Web -->
+    <link rel="authorization_endpoint" href="${blog.url}/indieWeb/indieAuth/authorize">
+    <link rel="token_endpoint" href="${blog.url}/indieWeb/indieAuth/token">
+    <link rel="micropub" href="${blog.url}/indieWeb/micropub">
+    <link rel="webmention" href="${blog.url}/indieWeb/webmentions/webmentions/receive">  
+    `;
+
   res.locals = {
     ...res.locals,
     blog,
+    theme,
+    page: parseInt(req.query.page) || 1,
   }
   next();
 };

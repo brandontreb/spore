@@ -87,24 +87,24 @@ const queryPosts = async(filter, options) => {
   } else if (!typeof options.include === 'array') {
     options.include = [options.include];
   }
-  options.include = ['blog', 'media', 'post_meta'];
+  options.include = ['blog', 'media', 'post_meta', 'tags', ...options.include];
 
   let posts = await SporeStore.queryPosts(filter, options);
   return posts;
 }
 
-const getPostById = async(id, include = ["media", "blog", "post_meta"]) => {
-  let post = await SporeStore.getPostById(id, include);
+const getPostById = async(id) => {
+  let post = await SporeStore.getPostById(id);
   return post;
 }
 
-const getPostBySlug = async(slug, include = ["blog"]) => {
-  let post = await SporeStore.getPostBySlug(slug, include);
+const getPostBySlug = async(slug) => {
+  let post = await SporeStore.getPostBySlug(slug);
   return post;
 }
 
-const getPostByPermalink = async(permalink, include = ["media", "blog", "post_meta"]) => {
-  let post = await SporeStore.getPostByPermalink(permalink, include);
+const getPostByPermalink = async(permalink) => {
+  let post = await SporeStore.getPostByPermalink(permalink);
   return post;
 }
 

@@ -12,8 +12,6 @@ const getBlog = async() => {
     logger.error('Blog not found');
     return null;
   }
-  logger.info('Blog found');
-  logger.debug(blog);
   return blog;
 }
 

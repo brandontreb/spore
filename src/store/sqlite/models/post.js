@@ -115,11 +115,60 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
-    }
+    },
+    links: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        const html = this.html;
+        const $ = cheerio.load(html);
+        const linkObjects = $('a');
+        const links = [];
+        for (let i = 0; i < linkObjects.length; i++) {
+          const link = linkObjects[i];
+          const href = link.attribs.href;
+          links.push(href);
+        }
+
+        if (this.type === 'reply') {
+          let meta = this.post_meta;
+          let reply = meta.find(m => m.name === 'in-reply-to');
+          if (reply) {
+            links.push(reply.value);
+          }
+        }
+
+        return links;
+      }
+    },
+    url: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        // check if this.permaLink starts with a slash
+        let slash = this.permalink.startsWith('/') ? '' : '/';
+        return `${this.blog.url}${slash}${this.permalink}`;
+      }
+    },
   }, {
     sequelize,
     modelName: 'Posts',
   });
+
+  Posts.prototype.getMeta = function(key) {
+    let meta = this.post_meta;
+    if (meta) {
+      for (let m of meta) {
+        if (m.name == key) {
+          return m.value;
+        }
+      }
+    }
+    return null;
+  }
+
+  Posts.prototype.published_date_formatted = function(format) {
+    return `${moment(this.published_date).utcOffset('-800').format(format)}`;
+  }
+
   return Posts;
 };
 /*
