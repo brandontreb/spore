@@ -224,7 +224,7 @@ const processFormEncodedBody = function(body) {
         key = key.slice(0, subKey.index);
       }
 
-      if (key.startsWith('mp-')) {
+      if (key && key.startsWith('mp-')) {
         key = key.slice(3);
         targetProperty = result.mp;
       } else {
@@ -256,7 +256,7 @@ const processJsonEncodedBody = function(body) {
 
     if (reservedProperties.includes(key) || ['properties', 'type'].includes(key)) {
       result[key] = value;
-    } else if (key.startsWith('mp-')) {
+    } else if (key && key.startsWith('mp-')) {
       key = key.slice(3);
       result.mp[key] = [].concat(value);
     }

@@ -1,0 +1,13 @@
+<% if(!locals.theme) { %>  
+  <!DOCTYPE html>
+  <html lang="<%- blog.language %>">
+  <head>
+    No Theme
+  </head>
+  <body>
+    No Theme Found For archive.ejs
+  </body>
+  </html>
+  <% } else { %>
+    <%- include(`../../../data/themes/${locals.theme.slug}/archive`); %>
+  <% } %>

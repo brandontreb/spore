@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.route('/').get(auth(false), blogController.index)
 router.get('/replies', auth(false), blogController.getReplies);
+router.get('/archive', auth(false), blogController.getArchive);
 router.get('/feed.xml', auth(false), feedController.xml);
 router.get('/feed.json', auth(false), feedController.json);
 

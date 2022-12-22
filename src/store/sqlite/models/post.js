@@ -146,7 +146,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.VIRTUAL,
       get() {
         // check if this.permaLink starts with a slash
-        let slash = this.permalink.startsWith('/') ? '' : '/';
+        let slash = this.permalink && this.permalink.startsWith('/') ? '' : '/';
         return `${this.blog.url}${slash}${this.permalink}`;
       }
     },

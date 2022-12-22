@@ -19,6 +19,11 @@ const markdown = catchAsync(async(req, res) => {
     let content = entry.getData().toString("utf8");
     let postObj = await importService.importMarkdown(name, content);
 
+    // Dont try to import failed posts
+    if (!postObj) {
+      continue;
+    }
+
     postObj.blog_id = blog.id;
     postObj.user_id = blog.user.id;
     let photo = postObj.media.photo;

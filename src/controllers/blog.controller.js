@@ -69,8 +69,58 @@ const getReplies = catchAsync(async(req, res) => {
   });
 });
 
+const getArchive = catchAsync(async(req, res) => {
+  let blog = res.locals.blog;
+  let filter = {};
+
+  let q = req.query.q || '';
+  if (q && typeof q === 'string') {
+    filter = {
+      [Op.or]: [{
+          title: {
+            [Op.like]: `%${q}%`
+          }
+        },
+        {
+          content: {
+            [Op.like]: `%${q}%`
+          }
+        },
+        {
+          tags: {
+            [Op.like]: `%${q}%`
+          }
+        }
+      ]
+    }
+  }
+
+  filter = {
+    [Op.and]: [{
+        status: 'published',
+        type: {
+          [Op.notIn]: ['page', 'reply']
+        },
+      },
+      filter
+    ]
+  }
+
+  let posts = await postService.queryPosts(filter, {
+    order: [
+      ['published_date', 'DESC']
+    ]
+  });
+  res.render('pages/archive', {
+    title: `Archive | ${blog.title}`,
+    posts,
+    blog
+  });
+});
+
 module.exports = {
   index,
   getPost,
-  getReplies
+  getReplies,
+  getArchive
 }

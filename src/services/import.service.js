@@ -95,12 +95,33 @@ const importMarkdown = async(name, markdown) => {
   let slug = frontMatter.attributes.slug;
   let permalink = frontMatter.attributes.permalink;
 
+  // remove the slash at the front of the string if exists
+  if (permalink && permalink[0] === '/') {
+    permalink = permalink.substring(1);
+  }
+  if (slug && slug[0] === '/') {
+    slug = slug.substring(1);
+  }
+
+  // remove the slash at the end of the string if exists
+  if (permalink && permalink[permalink.length - 1] === '/') {
+    permalink = permalink.substring(0, permalink.length - 1);
+  }
+  if (slug && slug[slug.length - 1] === '/') {
+    slug = slug.substring(0, slug.length - 1);
+  }
+
+
   if (!slug) {
     slug = permalink;
   }
 
   if (!permalink) {
     permalink = slug;
+  }
+
+  if (!slug && !permalink && !title) {
+    return null;
   }
 
   let postContent = frontMatter.body;
