@@ -41,7 +41,7 @@ const auth = (required) => async(req, res, next) => {
     <link rel="authorization_endpoint" href="${blog.url}/indieWeb/indieAuth/authorize">
     <link rel="token_endpoint" href="${blog.url}/indieWeb/indieAuth/token">
     <link rel="micropub" href="${blog.url}/indieWeb/micropub">
-    <link rel="webmention" href="https://webmention.io/${blog.naked_url}webmention" />
+    <link rel="webmention" href="https://webmention.io/${blog.naked_url}/webmention" />
     <link rel="pingback" href="https://webmention.io/${blog.naked_url}/xmlrpc" />  
     `;
 
