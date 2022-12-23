@@ -4,7 +4,7 @@ const logger = require('../config/logger');
 let { tokenService } = require('../services');
 
 const apiAuth = (scopes = 'create') => async(req, res, next) => {
-  let blog = config.blog;
+  let blog = await blogService.getBlog();
 
   // Check for a Bearer Token in headers
   let token = req.headers.authorization;

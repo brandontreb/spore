@@ -438,3 +438,9 @@ Contributions are more than welcome! Please check out the [contributing guide](C
 ## License
 
 [MIT](LICENSE)
+
+## Install 
+
+- [Server Setup](https://www.learnwithjason.dev/blog/deploy-nodejs-ssl-digitalocean)
+- [SSL Setup](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04)
+- [Nginx Reverse Proxy Setup](https://engineerworkshop.com/blog/setup-an-nginx-reverse-proxy-on-a-raspberry-pi-or-any-other-debian-os/)
