@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('partials/head') %>
+    <%- locals.theme.head %>
+</head>
+
+<body>
+  <header>
+    <%- include('partials/header'); %>
+  </header>
+
+  <article class="h-entry post-single">
+    <!-- Heading -->
+    <h2 class="p-name <%- locals.post.type !== 'article' ? 'u-hidden' : '' %>">
+      <a href="<%- locals.post.url %>">
+        <%- locals.post.title %>
+      </a>
+    </h2>
+    <a class="u-url" href="<%- locals.post.url %>">
+          <time class="dt-published" datetime="<%- locals.post.published_date.toISOString() %>">
+            <%- locals.post.published_date_formatted("h:mm:ss a, MMM Do YYYY") %>
+          </time>
+        </a>
+
+    <!-- Reply -->
+    <% if (post.type === 'reply') { %>
+      <p>in reply to:
+        <a class="u-in-reply-to" href="<%- post.getMeta('in-reply-to') %>">
+          <%- post.getMeta('in-reply-to') %>
+        </a>
+      </p>
+      <% } %>
+
+        <!-- Article -->
+        <div class="e-content">
+          <%- locals.post.html %>
+            <%- include('partials/media'); %>
+        </div>
+
+        <!-- Tags-->
+        <p>
+          <% 
+            let tags = post.tags && post.tags.length ? post.tags : '';
+            tags.forEach(tag => { %>
+            <% if(tag.name.length > 0) { %>
+              <a href="/archive/?q=<%- tag.slug %>">
+                  #<%- tag.name %>
+                </a>&nbsp;
+              <% } %>
+                <% }); %>
+        </p>
+
+        <span class="separator">
+            <span class="divider"></span>
+        </span>
+        <!-- Conversations-->
+        <div id="conversations"></div>
+
+        <!-- Author h-card -->
+        <%- include('partials/author') %>
+
+
+  </article>
+  <br><br>
+
+  <!-- Footer -->
+  <footer>
+    <%- include('partials/footer'); %>
+  </footer>
+</body>
+
+</html>

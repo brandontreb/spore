@@ -1,0 +1,119 @@
+body {
+  color: #666;
+}
+
+header {
+  background: var(--nc-bg-1);
+  border: 0;
+  margin-bottom: 0;
+}
+
+header a {
+  color: #333;
+  text-decoration: none;
+  color: #888;
+  margin-right: 20px;
+  margin-left: 0px;
+}
+
+.separator {
+  display: block;
+  margin: 42px 0 48px 0;
+  width: 100%;
+}
+
+span.divider {
+  display: block;
+  width: 100%;
+  background-color: #ddd;
+  height: .0025em;
+  margin: 0 auto;
+}
+
+.avatar {
+  float: left;
+  margin-right: 20px;
+}
+
+.avatar img {
+  object-fit: contain;
+  width: 75px;
+  height: 75px;
+}
+
+.dt-published {
+  font-size: 0.8em;
+  color: #aaa;
+}
+
+.post-single .dt-published {
+  display: block;
+}
+
+footer {
+  text-align: center;
+}
+
+.title {
+  text-decoration: none;
+}
+
+h2.p-name {
+  border: 0;
+}
+
+h2.p-name a {
+  color: #333;
+  text-decoration: none;
+}
+
+h1 {
+  font-weight: normal;
+}
+
+
+/* Post */
+
+.post-single p {
+  line-height: 1.5em;
+  margin: .5em;
+}
+
+.post-single .p-name {
+  text-align: center;
+}
+
+.post-single .u-url {
+  text-align: center;
+  text-decoration: none;
+}
+
+.post a {
+  color: #333;
+  text-decoration: underline;
+  font-size: 1.1em;
+}
+
+.u-url {
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  body {
+    color: #eee;
+  }
+  span.divider {
+    background-color: #333;
+  }
+  h2.p-name a {
+    color: #bcbcbc;    
+  }
+}
+
+
+/* Utility */
+
+.u-hidden {
+  display: none;
+}

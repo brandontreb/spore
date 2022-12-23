@@ -1,0 +1,55 @@
+<% 
+  const truncate = (str, len) => {
+    if(!str) {
+      return "";
+    }
+    if (str.length > len) {
+      return str.substring(0, len) + '...';
+    }
+    return str;
+  }
+%>
+  <!DOCTYPE html>
+  <html>
+
+  <head>
+    <%- include('partials/head') %>
+      <%- locals.theme.head %>
+  </head>
+
+  <body>
+    <header>
+      <%- include('partials/header'); %>
+    </header>
+
+
+    <main>
+      <content class="blog-posts">
+        <h1>Archive</h1>
+        <% locals.posts.forEach(post=> { %>
+          <p class="h-entry">
+            <a class="u-url" href="<%- post.url %>">
+            <time class="dt-published" datetime="<%- post.published_date %>"><%- post.published_date_formatted("h:mm:ss a, MMM Do YYYY") %></time>
+          </a>
+            <% if(post.type === 'note') { %>
+              <span class="p-summary"><%- truncate(post.text, 92) %></span>
+              <% } else { %>
+                <span class="p-name"><b><%- truncate(post.title, 45) %></b></span> <span class="p-summary"><%- truncate(post.text, 92) %></span>
+                <% } %>
+          </p>
+          <% }); %>
+      </content>
+      <span class="separator">
+        <span class="divider"></span>
+      </span>
+    </main>
+
+    <br><br>
+
+    <!-- Footer -->
+    <footer>
+      <%- include('partials/footer'); %>
+    </footer>
+  </body>
+
+  </html>

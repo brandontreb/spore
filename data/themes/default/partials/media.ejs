@@ -1,0 +1,6 @@
+<!-- Post Media-->
+<% if(post.media) { %>
+  <% for(let media of post.media) { %>
+    <p><img  loading="lazy" class="u-photo" src="<%- blog.url %>/<%- media.path %>" alt="<%- media.altText %>"></p>
+  <% } %>
+<% } %>

@@ -1,0 +1,59 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+<link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>
+<%- blog.favicon %>
+</text></svg>">
+<link rel="alternate icon" href="/favicon.ico" type="image/x-icon" sizes="48x48" />
+<title>
+  <%- locals.title %>
+</title>
+
+<meta name="robots" content="noindex">
+<meta name="robots" content="nofollow">
+
+<!-- Primary Meta Tags -->
+<meta name="title" content="<%- locals.title %>">
+<meta name="description" content="<%- blog.meta_description %>">
+<meta name="keywords" content="blog, blogging, write, writing" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="<%- locals.title %>">
+<meta property="og:url" content="<%- blog.url %>">
+<meta property="og:title" content="<%- locals.title %>">
+<meta property="og:description" content="<%- blog.meta_description %>">
+
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary">
+<meta property="twitter:url" content="<%- blog.url %>">
+<meta property="twitter:title" content="<%- locals.title %>">
+<meta property="twitter:description" content="<%- blog.meta_description %>">
+
+<!-- Microdata -->
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "name": "<%- locals.title %>>",
+    "url": "<%- blog.url %>",
+    "description": "<%- blog.meta_description %>",
+    "about": {
+      "@type": "<%- locals.title %>>",
+      "description": "<%- blog.meta_description %>"
+    },
+  }
+</script>
+
+<% if(!blog.overwrite_styles) { %>
+  <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+  <% } %>
+    <style>
+      <% if(blog.external_stylesheet_url) {
+        %>@import '<%- blog.external_stylesheet_url %>';
+        <%
+      }
+      
+      %><%- blog.custom_styles %>
+    </style>

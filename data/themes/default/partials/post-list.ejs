@@ -1,0 +1,38 @@
+<article class="h-entry">
+  <!-- Heading -->
+  <% if(post.type === 'article') { %>          
+    <h2 class="p-name">
+      <a href="<%- post.url %>">
+        <%- post.title %>
+      </a>
+    </h2>
+  <% } %>
+  <!-- Article -->        
+
+  <!-- Reply -->
+  <% if (post.type === 'reply') { %>
+    <p>in reply to: <a class="u-in-reply-to" href="<%- post.getMeta('in-reply-to') %>"><%- post.getMeta('in-reply-to') %></a></p>
+  <% } %>
+  <%- post.html %>
+  <%- include('media', {post}); %>        
+  <!-- Tags-->
+  <p>
+    <%
+     let tags = post.tags;
+     tags.forEach(tag => { %>
+      <% if(tag.name) { %>
+        <a href="/archive/?q=<%- tag.slug %>">
+          #<%- tag.name %>
+        </a>&nbsp;
+      <% } %>
+    <% }); %>
+  </p>
+    <a class="u-url" href="<%- post.url %>">
+      <time class="dt-published" datetime="<%- post.published_date %>">
+        → <%- post.published_date_formatted("h:mm:ss a, MMM Do") %>
+      </time>
+    </a>
+    <span class="separator">
+      <span class="divider"></span>
+    </span>
+</article>

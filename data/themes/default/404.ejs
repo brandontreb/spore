@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('partials/head') %>
+    <%- locals.theme.head %>
+      <script>
+        const numItemsToGenerate = 1;
+
+        function renderItem() {
+          // array of 20 random words
+          const words = [
+            "Sunset",
+            "Beach",
+            "Mountains",
+            "Waterfall",
+            "Forest",
+            "Wildlife",
+            "Flowers",
+            "Cityscape",
+            "Landscape",
+            "Night-sky",
+            "Lighthouse",
+            "Sunflower",
+            "Cherry-blossom",
+            "Tulip",
+            "Rose",
+            "Lavender",
+            "Poppy",
+            "Peony",
+            "Sunflower",
+            "Daisy"
+          ];
+          // get random word from array
+          let randomWord = words[Math.floor(Math.random() * words.length)];
+          fetch(`https://source.unsplash.com/1600x900/?${randomWord}`).then((response) => {
+            let item = document.createElement('div');
+            item.classList.add('item');
+            item.innerHTML = `
+            <img load="lazy" class="beach-image" src="${response.url}" alt="${randomWord} image"/>
+          `
+            document.getElementById('unsplash-photo').innerHTML = item.innerHTML;
+          })
+        }
+        for (let i = 0; i < numItemsToGenerate; i++) {
+          renderItem();
+        }
+      </script>
+</head>
+
+<body>
+  <header>
+    <%- include('partials/header'); %>
+  </header>
+
+
+  <main>
+    <content>
+      <h1>Not Found</h1>
+      <p>Sorry, but the post or page you were looking for does not exist.</p>
+      <p id="unsplash-photo">
+
+      </p>
+    </content>
+    <span class="separator">
+      <span class="divider"></span>
+    </span>
+  </main>
+
+  <br><br>
+
+  <!-- Footer -->
+  <footer>
+    <%- include('partials/footer'); %>
+  </footer>
+</body>
+
+</html>

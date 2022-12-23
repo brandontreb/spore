@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('partials/head') %>
+    <%- locals.theme.head %>
+</head>
+
+<body>
+  <header>
+    <%- include('partials/header'); %>
+  </header>
+
+  <content class="entries">
+  <% locals.posts.forEach(post=> { %>
+    <%- include('partials/post-list', {post: post}); %>     
+  <% }); %>
+  </content>
+
+  <a href="/?page=<%- locals.page + 1 %>">Next</a>        
+  <br><br>
+
+  <!-- Footer -->
+  <footer>
+    <%- include('partials/footer'); %>
+  </footer>
+</body>
+
+</html>
