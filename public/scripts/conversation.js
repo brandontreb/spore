@@ -70,8 +70,6 @@ ready(async() => {
       return;
     }
 
-    let target = encodeURIComponent(window.location.href);
-
     conversationsDiv.innerHTML = `
       <br /><hr />
       <form class="webmention-form" action="https://webmention.io/${blog_url}/webmention" method="post">
@@ -90,9 +88,30 @@ ready(async() => {
     <div class="clear"></div>
     `
 
+    let target = encodeURIComponent(window.location.href);
     let url = `https://webmention.io/api/mentions.jf2?target=${target}`
     const response = await fetch(url);
     let data = await response.json();
+
+    // If there was a slash at the end of target, try again without it
+    if (target.endsWith('/')) {
+      target = target.slice(0, -1);
+      url = `https://webmention.io/api/mentions.jf2?target=${target}`
+      const response = await fetch(url);
+      // Merge data
+      let data2 = await response.json();
+      data.children = data.children.concat(data2.children);
+    }
+
+    // If there was no slash at the end of target, try again with it
+    if (!target.endsWith('/')) {
+      target = target + '/';
+      url = `https://webmention.io/api/mentions.jf2?target=${target}`
+      const response = await fetch(url);
+      // Merge data
+      let data2 = await response.json();
+      data.children = data.children.concat(data2.children);
+    }
 
     if (!data || !data.children || data.children.length === 0) {
       return;
