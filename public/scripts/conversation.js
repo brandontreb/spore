@@ -131,14 +131,14 @@ ready(async() => {
       conversationDiv.className = 'conversation';
       conversationDiv.innerHTML = `
         <div class="mention">
-          <img src="${mention.author.photo}" alt="${mention.author.name}" width="25" height="25" style="max-width: 25px;" />
+          <img src="${mention.author.photo}" alt="${mention.author.name}" width="50" height="50" style="max-width: 50px;" />
           <a href="${mention.author.url}">
             <span class="p-name">${mention.author.name}</span>
           </a>                
           <span>${mention.content.html || mention.content.text}</span>                
-          <span class="date">
+          <div class="date">
             <a href="${mention['wm-source']}">${new Date(mention.published).toDateString()}</a>
-          </span>        
+          </div>        
         </div>
         `;
       conversationDiv.id = mention.id;
