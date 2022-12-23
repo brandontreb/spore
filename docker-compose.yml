@@ -3,30 +3,17 @@ version: '3'
 services:
   node-app:
     build: .
-    image: node-app
-    environment:
-      - MONGODB_URL=mongodb://mongodb:27017/node-boilerplate
+    image: spore    
     ports:
-      - '3000:3000'
-    depends_on:
-      - mongodb
+      - '3000:5000'    
     volumes:
-      - .:/usr/src/node-app
+      - .:/usr/src/spore
     networks:
-      - node-network
-
-  mongodb:
-    image: mongo:4.2.1-bionic
-    ports:
-      - '27017:27017'
-    volumes:
-      - dbdata:/data/db
-    networks:
-      - node-network
+      - spore-network  
 
 volumes:
   dbdata:
 
 networks:
-  node-network:
+  spore-network:
     driver: bridge
