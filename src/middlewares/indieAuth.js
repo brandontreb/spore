@@ -1,7 +1,7 @@
 const config = require('../config/config');
 const httpStatus = require('http-status');
 const logger = require('../config/logger');
-let { tokenService } = require('../services');
+let { tokenService, blogService } = require('../services');
 
 const apiAuth = (scopes = 'create') => async(req, res, next) => {
   let blog = await blogService.getBlog();
