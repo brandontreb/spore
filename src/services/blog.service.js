@@ -40,7 +40,7 @@ const createBlog = async(body) => {
   await SporeStore.createBlog(blogMeta, userMeta);
 }
 
-const updateBlog = async(body) => {
+const updateBlog = async(blog, body) => {
   // Save the meta
   let blogMeta = pick(body, [
     'title', 'url', 'homepage_content', 'homepage_content_html', 'meta_description',
@@ -54,6 +54,12 @@ const updateBlog = async(body) => {
   if (blogMeta.url) {
     blogMeta.url = utils.normalizeUrl(blogMeta.url);
   }
+
+  if (blogMeta.username) {
+    // Generate acct which is username@domain
+    blogMeta.acct = `${blogMeta.username}@${utils.nakedUrl(blog.url)}`;
+  }
+
   await SporeStore.updateBlog(blogMeta);
 }
 

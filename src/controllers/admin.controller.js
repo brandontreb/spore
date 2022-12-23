@@ -12,7 +12,8 @@ const getAdmin = catchAsync(async(req, res) => {
 });
 
 const updateBlog = catchAsync(async(req, res) => {
-  await blogService.updateBlog(req.body);
+  let blog = res.locals.blog;
+  await blogService.updateBlog(blog, req.body);
   req.flash('success', 'Blog updated successfully');
   res.redirect('/admin');
 });
