@@ -31,6 +31,7 @@ const auth = (required) => async(req, res, next) => {
     slug: 'default',
   }
 
+  // TODO: Add a blog config for webmtion.io
   theme.head = `  
     <link rel="alternate" type="application/json" title="${blog.user.username}" href="${blog.url}/feed.json" />
     <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
@@ -40,7 +41,8 @@ const auth = (required) => async(req, res, next) => {
     <link rel="authorization_endpoint" href="${blog.url}/indieWeb/indieAuth/authorize">
     <link rel="token_endpoint" href="${blog.url}/indieWeb/indieAuth/token">
     <link rel="micropub" href="${blog.url}/indieWeb/micropub">
-    <link rel="webmention" href="${blog.url}/indieWeb/webmentions/webmentions/receive">  
+    <link rel="webmention" href="https://webmention.io/${blog.naked_url}webmention" />
+    <link rel="pingback" href="https://webmention.io/${blog.naked_url}/xmlrpc" />  
     `;
 
   res.locals = {
