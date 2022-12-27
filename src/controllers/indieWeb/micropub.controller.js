@@ -54,7 +54,7 @@ const create = catchAsync(async(req, res, next) => {
 
 // Create and endpoint called media that allows uploads
 const media = catchAsync(async(req, res, next) => {
-  let blog = config.blog;
+  let blog = res.locals.blog;
 
   if (!req.files || req.files.length === 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'No file uploaded');
@@ -88,23 +88,22 @@ const media = catchAsync(async(req, res, next) => {
 });
 
 const getMedia = catchAsync(async(req, res, next) => {
-  const blog = config.blog;
+  const blog = res.locals.blog;
   if (req.query && req.query.q && req.query.q === 'source') {
     // Get the last upload media item
-    // let media = await mediaService.queryMedia({}, {
-    //   limit: 1,
-    //   order: [
-    //     ['createdAt', 'DESC']
-    //   ]
-    // });
-    // media = media.map(m => {
-    //   return {
-    //     url: `${blog.url}/${m.path}`,
-    //     mime_type: m.mimeType,
-    //     published: m.createdAt
-    //   }
-    // });
-    let media = {};
+    let media = await mediaService.queryMedia({}, {
+      limit: 1,
+      order: [
+        ['createdAt', 'DESC']
+      ]
+    });
+    media = media.map(m => {
+      return {
+        url: `${blog.url}/${m.path}`,
+        mime_type: m.mimeType,
+        published: m.createdAt
+      }
+    });
     return res.json(media);
   }
   // throw error if not source
