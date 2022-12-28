@@ -20,6 +20,7 @@ const create = catchAsync(async(req, res, next) => {
     } else if (req.query['q'] === 'category') {
       return res.json([]);
     }
+    return res.json([]);
   }
 
 
