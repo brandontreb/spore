@@ -118,8 +118,7 @@ const token = async(req, res) => {
     }
   }
 
-  // Make sure redirect_uri is the same as the one in the request
-  console.log('redirect_uri: %s', redirect_uri);
+  // Make sure redirect_uri is the same as the one in the request  
   if (redirect_uri !== indieAuthRequest.redirect_uri) {
     return res.status(400).json({
       error: 'invalid_request',

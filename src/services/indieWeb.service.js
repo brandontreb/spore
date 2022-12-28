@@ -293,6 +293,9 @@ const cleanEmptyKeys = function(result) {
 const ensureArrayAndCloneIt = (value) => Array.isArray(value) ? [...value] : [value];
 
 const sendWebmentions = async(source, targets) => {
+  if (targets.length === 0) {
+    return;
+  }
   logger.debug(`Sending webmentions from ${source} to ${targets}`);
   targets.forEach(async(target) => {
     webmention(source, target, `${config.name}/${config.version}`, function(err, obj) {

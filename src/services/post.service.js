@@ -32,7 +32,9 @@ const createPost = async(postDoc) => {
   let post = await SporeStore.createPost(postDoc);
 
   // Save post.media
+  logger.debug('Saving media: %j', media);
   if (media && media.photo && media.photo.length > 0) {
+
     for (let photo of media.photo) {
       let alt_text = '';
       if (typeof photo === 'object') {
@@ -40,8 +42,6 @@ const createPost = async(postDoc) => {
           alt_text = photo.alt;
         }
         photo = photo.value;
-      } else {
-        continue;
       }
       let filename = photo.split('/').pop();
       let media = await mediaService.getMediaByFilename(filename);

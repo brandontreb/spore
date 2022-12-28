@@ -42,7 +42,6 @@ const downloadMediaFile = async(url) => {
 
   let fileName = url.split('/').pop();
   let path = `${__dirname}/../../data/uploads/${fileName}`;
-  console.log(path);
 
   try {
     return await download(
@@ -147,13 +146,6 @@ const importMarkdown = async(name, markdown) => {
     media: {}
   };
 
-  // let post;
-  // try {
-  //   post = await SporeStore.createPost(postObject);
-  // } catch (e) {
-  //   console.log(e);
-  // }
-
   // Download the media files
 
   if (photo) {
@@ -162,9 +154,6 @@ const importMarkdown = async(name, markdown) => {
       const pathRegex = new RegExp(/\.\.\/\.\.\/(.*)/, "g");
       const match = pathRegex.exec(media.path);
       media.path = match[1];
-      // media.post_id = post ? post.id : 1;
-      // await associateMediaFilesWithPost(post, [media]);
-      // console.log(media);
       postObject.media.photo = [media];
     } else {
       logger.debug(`Could not download media file ${photo[0]}`);

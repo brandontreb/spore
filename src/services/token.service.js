@@ -28,7 +28,6 @@ const generateToken = (blogUrl, expires, type, otherItems, secret = config.jwt.s
 //  * @returns {Promise<Token>}
 //  */
 const verifyToken = async(token, type = tokenTypes.ACCESS) => {
-  console.log('verifyToken', token, type);
   const payload = jwt.verify(token, config.jwt.secret);
   return payload;
 };

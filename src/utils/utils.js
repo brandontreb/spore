@@ -36,7 +36,6 @@ const getGravatar = (email) => {
 
 const markdownToHtml = (markdown) => {
   let decoded = HTMLDecoderEncoder.decode(markdown);
-  console.log(decoded);
   return md.render(decoded);
 };
 

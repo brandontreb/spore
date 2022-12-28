@@ -117,8 +117,6 @@ ready(async() => {
       return;
     }
 
-    console.log(data.children);
-
     conversationsDiv.innerHTML = `${conversationsDiv.innerHTML}<h3>Replies</h3>`;
 
     let mentions = data.children

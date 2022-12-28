@@ -378,7 +378,6 @@ const SporeStore = class SporeStore extends ISporeStore {
       }
     });
     user = await user.update(body);
-    console.log(user);
     return user;
   }
 
