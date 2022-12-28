@@ -11,12 +11,17 @@ const create = catchAsync(async(req, res, next) => {
   let blog = res.locals.blog;
 
   // check if get request
-  if (req.method === 'GET' && req.query['q'] === 'config') {
-    return res.json({
-      "media-endpoint": `${blog.url}/indieWeb/micropub/media`,
-      "syndicate-to": []
-    });
+  if (req.method === 'GET') {
+    if (req.query['q'] === 'config') {
+      return res.json({
+        "media-endpoint": `${blog.url}/indieWeb/micropub/media`,
+        "syndicate-to": []
+      });
+    } else if (req.query['q'] === 'category') {
+      return res.json([]);
+    }
   }
+
 
   // check if get request
   if (!body) {
