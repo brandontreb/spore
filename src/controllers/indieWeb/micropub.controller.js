@@ -97,10 +97,11 @@ const media = catchAsync(async(req, res, next) => {
 
 const getMedia = catchAsync(async(req, res, next) => {
   const blog = res.locals.blog;
+  const limit = req.query.limit || 10;
   if (req.query && req.query.q && req.query.q === 'source') {
     // Get the last upload media item
     let media = await mediaService.queryMedia({}, {
-      limit: 1,
+      limit: limit,
       order: [
         ['createdAt', 'DESC']
       ]
