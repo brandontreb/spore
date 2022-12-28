@@ -62,6 +62,8 @@ const create = catchAsync(async(req, res, next) => {
 const media = catchAsync(async(req, res, next) => {
   let blog = res.locals.blog;
 
+  logger.info('micropub media request: %j', req.files);
+
   if (!req.files || req.files.length === 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'No file uploaded');
   }
