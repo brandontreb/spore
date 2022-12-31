@@ -19,7 +19,7 @@ const create = catchAsync(async(req, res, next) => {
     } else if (req.query['q'] === 'category') {
       let allTags = await postService.getAllTags(blog.id);
       let categories = allTags.map((tag) => tag.name);
-      return res.json(categories);
+      return res.json({ categories });
     } else if (req.query['q'] === 'syndicate-to') {
       return res.json([]);
     }
