@@ -192,6 +192,12 @@ const SporeStore = class SporeStore extends ISporeStore {
     return tagObj;
   };
 
+  getAllTags = async(blogId) => {
+    // TODO: Add blog_id to tags
+    let tags = await this.db.Tags.findAll();
+    return tags;
+  };
+
   createPostTag = async(postId, tagId) => {
     logger.debug('Saving tag to post to the database: %j,  %j', postId, tagId);
     let existingPostTag = await this.db.Post_Tags.findOne({

@@ -58,6 +58,9 @@ const createPost = async(postDoc) => {
   if (tags && typeof tags === 'object' && tags.length) {
     for (let i = 0; i < tags.length; i++) {
       let tagDoc = tags[i];
+      if (tagDoc.name === '') {
+        continue;
+      }
       let tag = await SporeStore.createTag(tagDoc);
       await SporeStore.createPostTag(post.id, tag.id);
     }
@@ -110,10 +113,16 @@ const getPostByPermalink = async(permalink) => {
   return post;
 }
 
+const getAllTags = async(blogId) => {
+  let tags = await SporeStore.getAllTags(blogId);
+  return tags;
+}
+
 module.exports = {
   createPost,
   queryPosts,
   getPostById,
   getPostBySlug,
-  getPostByPermalink
+  getPostByPermalink,
+  getAllTags
 };

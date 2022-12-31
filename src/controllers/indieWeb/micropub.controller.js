@@ -4,7 +4,6 @@ const httpStatus = require('http-status');
 const ApiError = require('../../utils/ApiError');
 const logger = require('../../config/logger');
 const { indieWebService, postService, mediaService } = require('../../services');
-// const SporeStore = require('../../store');
 
 const create = catchAsync(async(req, res, next) => {
   let { body, query } = req;
@@ -18,11 +17,14 @@ const create = catchAsync(async(req, res, next) => {
         "syndicate-to": []
       });
     } else if (req.query['q'] === 'category') {
+      let allTags = await postService.getAllTags(blog.id);
+      let categories = allTags.map((tag) => tag.name);
+      return res.json(categories);
+    } else if (req.query['q'] === 'syndicate-to') {
       return res.json([]);
     }
     return res.json([]);
   }
-
 
   // check if get request
   if (!body) {
