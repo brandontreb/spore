@@ -10,8 +10,9 @@
     "node": ">=12.0.0"
   },
   "scripts": {
-    "start": "pm2 start ecosystem.config.json --no-daemon",
-    "dev": "cross-env NODE_ENV=development nodemon src/index.js",    
+    "start": "pm2 start ecosystem.config.json",
+    "restart": "pm2 restart ecosystem.config.json",
+    "dev": "cross-env NODE_ENV=development nodemon src/index.js",        
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check **/*.js",

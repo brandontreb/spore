@@ -14,7 +14,7 @@ yarn install
 node_modules/.bin/sequelize db:migrate
 ```
 
-## 3. Conifgure the environment
+## 3. Configure the environment
 
 ```bash
 cp .env.example .env
