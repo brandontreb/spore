@@ -11,13 +11,13 @@
     <%- include('partials/header'); %>
   </header>
 
-  <content class="entries">        
+  <div class="entries"> 
     <% posts.forEach(post=> { %>
-      <%- include('partials/post-list', {post: post}); %>  
+      <%- include('partials/post-list', {post: post}); %>
     <% }); %>
-  </content>
-    
-  <a href="/?page=<%- locals.page + 1 %>">Next</a>      
+  </div>
+
+  <a href="/?page=<%- locals.page + 1 %>">Next</a>
   <%- include('partials/author'); %>
   <br><br>
 

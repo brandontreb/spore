@@ -11,11 +11,11 @@
     <%- include('partials/header'); %>
   </header>
 
-  <content class="entries">
+  <div class="entries">
   <% locals.posts.forEach(post=> { %>
     <%- include('partials/post-list', {post: post}); %>     
   <% }); %>
-  </content>
+  </div>
 
   <a href="/?page=<%- locals.page + 1 %>">Next</a>        
   <br><br>
