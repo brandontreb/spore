@@ -23,7 +23,35 @@ const updateBlog = {
   })
 }
 
+const createPost = {
+  params: {
+    id: Joi.string()
+  },
+  body: Joi.object().keys({
+    title: Joi.string().allow('').optional(),
+    slug: Joi.string().allow(null, ''),
+    published_date: Joi.date().allow(null, '').optional(),
+    content: Joi.string().allow(null, ''),
+    meta_description: Joi.string().allow(null, '').optional(),
+    meta_image_url: Joi.string().allow(null, '').optional(),
+    tags: Joi.string().allow(null, '').optional(),
+    is_page: Joi.boolean().default(false),
+    show_in_feed: Joi.boolean().default(false),
+    status: Joi.string().default('published'),    
+    media_files: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()),
+    type: Joi.string().default('post'),
+  })
+};
+
+const deletePost = {
+  params: {
+    postId: Joi.string().required()
+  }
+}
+
 module.exports = {
   install,
-  updateBlog
+  updateBlog,
+  createPost,
+  deletePost,
 }

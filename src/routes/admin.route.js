@@ -19,8 +19,8 @@ router
 router
   .route('/posts/:postId')
   .get(auth(true), adminController.getPost)
-  //.put(auth(true), validate(adminValidation.updatePost), adminController.updatePost)
-  //.delete(auth(true), adminController.deletePost);
+  .put(auth(true), validate(adminValidation.updatePost), adminController.updatePost)
+  .delete(auth(true), validate(adminValidation.deletePost), adminController.deletePost);
 
 // Install
 router.route('/install')

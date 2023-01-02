@@ -39,7 +39,7 @@ app.use(methodOverride('_method'))
 app.set('trust proxy', 1)
 app.use(session({
   key: 'spore.blog.session',
-  secret: 'secret',
+  secret: config.jwt.secret,
   resave: false,
   saveUninitialized: true,
   cookie: {

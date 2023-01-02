@@ -49,6 +49,7 @@ document.getElementById('idTitle'))">
         <% } %>
 
         <!-- type specific goes here -->
+        <%- include(`../partials/posts/${locals.type}`); %>     
 
         <p>
           <label for="content">Content (markdown): <span class="helptext"><a
@@ -91,12 +92,12 @@ document.getElementById('idTitle'))">
 
         <details>
           <summary>Post Settings</summary>
-          <p>
+          <!-- <p>
             <label for="published_date">Date:</label>
             <input type="date" id="published_date" name="published_date"
               value="<%- locals.post ? locals.post.published_date_formatted_picker : '' %>">
             <span class="helptext">eg: '2022-03-10' (leave empty to post now)</span>
-          </p>
+          </p> -->
 
           <p>
             <label for="tags">Tags:</label>
@@ -143,7 +144,7 @@ document.getElementById('idTitle'))">
 
       <% if(locals.post) { %>
         <p>
-        <form method="post" action="/dashboard/posts/<%- locals.post.id %>?_method=DELETE" name="form-delete"
+        <form method="post" action="/admin/posts/<%- locals.post.id %>?_method=DELETE" name="form-delete"
           id="form-delete">
           <a href="<%- locals.post.url %>" target="_blank">View post</a> |
           <a class="text-danger" href="# " onclick="return confirm( 'Are you sure you want to delete this post?') ? 

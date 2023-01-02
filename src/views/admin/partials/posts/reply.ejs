@@ -1,0 +1,9 @@
+<!-- Reply Field-->
+<p id="idReplyTo">
+  <label for="reply-to">Reply To (a URL you are replying to):</label>
+  <input <%- locals.post ? 'disabled' : '' %> 
+  type="text" 
+  id="idInReplyto" 
+  name="meta[in-reply-to]" 
+  value="<%- locals.post && locals.post.getMeta('in-reply-to') %>">
+</p>

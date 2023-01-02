@@ -85,14 +85,52 @@ const getPost = catchAsync(async(req, res) => {
   res.render('admin/pages/post', {
     admin_title: 'Post',
     post: post,
+    type: post.type,
   });
 });
 
+const updatePost = catchAsync(async(req, res) => {  
+  let blog = res.locals.blog;
+  let type = req.body.title && req.body.title.length > 0 ? 'article' : 'note';
+  let post = await postService.getPostById(req.params.postId);
+  if (!post) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
+  }
+
+  let postDoc = {
+    ...req.body,
+    type: type,
+    blog_id: blog.id,
+  }
+
+  console.log(req.params)
+  console.log(req.query);
+  console.log(req.body);
+  
+  logger.debug("Updating post: " + JSON.stringify(postDoc));
+
+  await postService.createPost(post, postDoc);
+  req.flash('success', 'Post updated successfully');
+  res.redirect('/admin/posts/' + post.id);
+});
+
+const deletePost = catchAsync(async(req, res) => {
+  let blog = res.locals.blog;
+  let post = await postService.getPostById(req.params.postId);
+  if (!post) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
+  }
+  await postService.deletePost(post.id);
+  req.flash('success', 'Post deleted successfully');
+  res.redirect('/admin/posts');
+});
 
 module.exports = {
   getAdmin,
   install,
   updateBlog,
   getPosts,
-  getPost
+  getPost,
+  updatePost,
+  deletePost
 };

@@ -16,12 +16,15 @@ const createPost = async(postDoc) => {
 
   // Create local copy of relationships
   postDoc.tags_csv = postDoc.tags;
-  let tags = postDoc.tags.split(',').map((tag) => {
-    return {
-      name: tag,
-      slug: slugify(tag)
-    };
-  });
+  let tags = [];
+  if(postDoc.tags && postDoc.tags.length) {
+    tags = postDoc.tags.split(',').map((tag) => {
+      return {
+        name: tag,
+        slug: slugify(tag)
+      };
+    });
+  }
   delete postDoc.tags;
   let media = postDoc.media;
   delete postDoc.media;
@@ -113,6 +116,11 @@ const getPostByPermalink = async(permalink) => {
   return post;
 }
 
+const deletePost = async(id) => {
+  let post = await SporeStore.deletePost(id);
+  return post;
+}
+
 const getAllTags = async(blogId) => {
   let tags = await SporeStore.getAllTags(blogId);
   return tags;
@@ -124,5 +132,6 @@ module.exports = {
   getPostById,
   getPostBySlug,
   getPostByPermalink,
-  getAllTags
+  getAllTags,
+  deletePost
 };

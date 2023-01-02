@@ -118,6 +118,15 @@ const SporeStore = class SporeStore extends ISporeStore {
     return post;
   }
 
+  deletePost = async(id) => {
+    let post = await this.db.Posts.destroy({
+      where: {
+        id,
+      },
+    });
+    return post;
+  };
+
   /**
    * Media
    *  
