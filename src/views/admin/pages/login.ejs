@@ -13,8 +13,7 @@
         <header>
           <a class="title" href="/">
             <h1>
-              <span class="title-spore">🌱</span> spore.blog |
-      <%- admin_title %>
+              <span class="title-spore">🌱</span> spore.blog | <%- admin_title %>
         </h1>
         </a>
           <!-- Show flash messages-->
@@ -29,7 +28,7 @@
         <form action="/admin/auth/login" method="post">
           <p>
             <label for="email">Email or Username</label>
-            <input type="text" class="form-control" id="email" name="email" placeholder="">
+            <input type="text" class="form-control" id="email" name="email" placeholder="" autocomplete="email">
           </p>
           <p>
             <label for="password">Password</label>
