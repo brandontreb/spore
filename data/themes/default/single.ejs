@@ -42,7 +42,7 @@
         <!-- Tags-->
         <p>
           <% 
-            let tags = post.tags && post.tags.length ? post.tags : '';
+            let tags = post.tags && post.tags.length ? post.tags : [];
             tags.forEach(tag => { %>
             <% if(tag.name.length > 0) { %>
               <a href="/archive/?q=<%- tag.slug %>">

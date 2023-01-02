@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const logger = require('../config/logger');
-const { blogService } = require('../services');
+const { blogService, postService } = require('../services');
 
 const getAdmin = catchAsync(async(req, res) => {
   res.render('admin/pages/index', {
@@ -54,8 +54,45 @@ const install = catchAsync(async(req, res) => {
 
 });
 
+const getPosts = catchAsync(async(req, res) => {
+  let blog = res.locals.blog;
+  let type = req.query.type || 'note';
+  let posts = await postService.queryPosts({
+    blog_id: blog.id,
+    type: type
+  }, {
+    order: [
+      ['published_date', 'DESC']
+    ],
+    limit: res.locals.postsPerPage,
+    offset: (res.locals.page - 1) * res.locals.postsPerPage
+  });
+  res.render('admin/pages/posts', {
+    admin_title: 'Posts',
+    posts: posts,
+    type: type,
+    page: res.locals.page,
+    postsPerPage: res.locals.postsPerPage,
+  });
+});
+
+const getPost = catchAsync(async(req, res) => {
+  let blog = res.locals.blog;
+  let post = await postService.getPostById(req.params.postId);
+  if (!post) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
+  }
+  res.render('admin/pages/post', {
+    admin_title: 'Post',
+    post: post,
+  });
+});
+
+
 module.exports = {
   getAdmin,
   install,
-  updateBlog
+  updateBlog,
+  getPosts,
+  getPost
 };

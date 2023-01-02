@@ -1,0 +1,74 @@
+<% 
+  const truncate = (str, len) => {
+    if (str.length > len) {
+      return str.substring(0, len) + '...';
+    }
+    return str;
+  }
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+  <script>
+    const setPostType = () => {
+      let type = document.getElementById("idPostTypeSelect").value;
+      // redirect to ?type=type
+      window.location.href = `?type=${type}`;      
+    }
+  </script>
+</head>
+
+<body class="container">
+
+  <header>
+    <%- include('../partials/header'); %>    
+  </header>
+
+  <main>
+    <content>      
+      <p>
+        <label for="type">Post Type:</label>
+        <select name="postTypeSelect" id="idPostTypeSelect" onchange="setPostType()">
+          <option value="note" <%- type === 'note' ? 'selected' : '' %>>Note</option>
+          <option value="photo" <%- type === 'photo' ? 'selected' : '' %>>Photo</option>
+          <option value="reply" <%- type === 'reply' ? 'selected' : '' %>>Reply</option>
+          <option value="article" <%- type === 'article' ? 'selected' : '' %>>Article</option>
+        </select>
+      </p>
+        <% posts.forEach(post => { %>
+          <p>                      
+            <a href="/admin/posts/<%- post.id %>/">
+              <time datetime="<%- post.published_date_formatted %>"><%- post.published_date_formatted("YYYY-MM-DD") %></time>
+            </a>      
+            <% if(post.status === 'draft') { %>
+              <span>[draft]</span>
+            <% } %>            
+            <% if(post.type !== 'article') { %>
+              <span><%- truncate(post.text, 92) %></span>
+            <% } else if(post.title) { %>              
+              <span><b><%- truncate(post.title, 45) %></b></span>
+            <% } %>    
+          </p>
+          <% }); %>
+      
+      <% if(posts.length === 0) { %>
+        <p>No posts found.</p>
+      <% } %>
+      <% if(posts.length === locals.postsPerPage) { %>
+        <p>
+          <a href="/admin/posts/?page=<%- page + 1 %>&type=<%- type %>">More Posts</a>
+        </p>
+      <% } %>
+    </content>
+  </main>
+
+  <footer>
+    <%- include('../partials/footer'); %>
+  </footer>
+
+</body>
+
+</html>

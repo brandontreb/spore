@@ -17,8 +17,8 @@ const index = catchAsync(async(req, res) => {
     order: [
       ['published_date', 'DESC']
     ],
-    limit: 25,
-    offset: (page - 1) * 25
+    limit: res.locals.postsPerPage,
+    offset: (page - 1) * res.locals.postsPerPage
   });
   res.render('pages/index', {
     title: res.locals.blog.title,
@@ -59,8 +59,8 @@ const getReplies = catchAsync(async(req, res) => {
     order: [
       ['published_date', 'DESC']
     ],
-    limit: 25,
-    offset: (res.locals.page - 1) * 25
+    limit: res.locals.postsPerPage,
+    offset: (res.locals.page - 1) * res.locals.postsPerPage
   });
   res.render('pages/replies', {
     title: `Replies | ${blog.title}`,

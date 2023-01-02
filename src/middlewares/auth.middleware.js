@@ -32,17 +32,20 @@ const auth = (required) => async(req, res, next) => {
   }
 
   // TODO: Add a blog config for webmtion.io
-  theme.head = `  
+  theme.head = `     
+    <!-- Feeds -->  
     <link rel="alternate" type="application/json" title="${blog.user.username}" href="${blog.url}/feed.json" />
-    <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
-    <link rel="stylesheet" href="/data/themes/${theme.slug}/${theme.slug}.css">
-    <link rel="me" href="mailto:${blog.user.email}">    
+    <link rel="alternate" type="application/rss+xml" href="/feed.xml" />    
     <!-- Indie Web -->
+    <link rel="me" href="mailto:${blog.user.email}">
     <link rel="authorization_endpoint" href="${blog.url}/indieWeb/indieAuth/authorize">
     <link rel="token_endpoint" href="${blog.url}/indieWeb/indieAuth/token">
     <link rel="micropub" href="${blog.url}/indieWeb/micropub">
     <link rel="webmention" href="https://webmention.io/${blog.naked_url}/webmention" />
     <link rel="pingback" href="https://webmention.io/${blog.naked_url}/xmlrpc" />  
+    <!-- Styles -->
+    <link rel="stylesheet" href="/data/themes/${theme.slug}/${theme.slug}.css">       
+    <!-- Scripts -->
     <script id="script_conversation" data-blog_url="${blog.naked_url}" src="/scripts/conversation.js"></script>
     `;
 
@@ -51,6 +54,7 @@ const auth = (required) => async(req, res, next) => {
     blog,
     theme,
     page: parseInt(req.query.page) || 1,
+    postsPerPage: 25, // TODO: Make this configurable
   }
   next();
 };

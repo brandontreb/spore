@@ -12,6 +12,16 @@ router
   .get(auth(true), adminController.getAdmin)
   .put(auth(true), validate(adminValidation.updateBlog), adminController.updateBlog);
 
+// Posts
+router
+  .route('/posts')
+  .get(auth(true), adminController.getPosts);
+router
+  .route('/posts/:postId')
+  .get(auth(true), adminController.getPost)
+  //.put(auth(true), validate(adminValidation.updatePost), adminController.updatePost)
+  //.delete(auth(true), adminController.deletePost);
+
 // Install
 router.route('/install')
   .get(auth(false), adminController.install)
