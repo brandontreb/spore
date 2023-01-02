@@ -30,8 +30,8 @@ document.getElementById('idTitle'))">
         <%- locals.post ? 'Edit Post' : 'New Post' %>
       </h1>
 
-      <form enctype="multipart/form-data" method="POST"
-        action="/admin/posts/<%- locals.post ? `${post.id}?_method=PUT` : 'new' %>">
+      <form method="POST"
+        action="/admin/posts/<%- locals.post ? `${post.id}?_method=PUT` : '' %>">
         <input accept="image/*" type="file" name="media_files" multiple="multiple" id='idMedia' style="display: none;"
           onchange="showSelectedImage(
           this,

@@ -101,15 +101,11 @@ const updatePost = catchAsync(async(req, res) => {
     ...req.body,
     type: type,
     blog_id: blog.id,
+    id: post.id
   }
 
-  console.log(req.params)
-  console.log(req.query);
-  console.log(req.body);
-  
   logger.debug("Updating post: " + JSON.stringify(postDoc));
-
-  await postService.createPost(post, postDoc);
+  await postService.createPost(postDoc);
   req.flash('success', 'Post updated successfully');
   res.redirect('/admin/posts/' + post.id);
 });

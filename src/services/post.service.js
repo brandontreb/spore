@@ -16,7 +16,7 @@ const createPost = async(postDoc) => {
 
   // Create local copy of relationships
   postDoc.tags_csv = postDoc.tags;
-  let tags = [];
+  let tags = [];  
   if(postDoc.tags && postDoc.tags.length) {
     tags = postDoc.tags.split(',').map((tag) => {
       return {
@@ -31,8 +31,13 @@ const createPost = async(postDoc) => {
   let meta = postDoc.meta;
   delete postDoc.meta;
 
+  let post = null;
   logger.debug('Saving post to the database: %j', postDoc);
-  let post = await SporeStore.createPost(postDoc);
+  if(postDoc.id) {
+    post = await SporeStore.updatePost(postDoc.id, postDoc);
+  } else {
+    post = await SporeStore.createPost(postDoc);
+  }
 
   // Save post.media
   logger.debug('Saving media: %j', media);

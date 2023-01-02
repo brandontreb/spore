@@ -120,6 +120,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.VIRTUAL,
       get() {
         const html = this.html;
+        if(!html) return [];
         const $ = cheerio.load(html);
         const linkObjects = $('a');
         const links = [];
@@ -145,9 +146,10 @@ module.exports = (sequelize, DataTypes) => {
     url: {
       type: DataTypes.VIRTUAL,
       get() {
+        let base = this.blog ? this.blog.url : '';
         // check if this.permaLink starts with a slash
         let slash = this.permalink && this.permalink.startsWith('/') ? '' : '/';
-        return `${this.blog.url}${slash}${this.permalink}`;
+        return `${base}${slash}${this.permalink}`;
       }
     },
     html_with_media: {
@@ -160,7 +162,7 @@ module.exports = (sequelize, DataTypes) => {
             content = `${content}\n\n<p><img class="u-photo" src="${this.blog.url}/${media.path}" alt="${media.alt_text || ""}"></p>`;
           }
         }
-        return md.render(content);
+        return content ? md.render(content) : '';
       },
     },
     html_with_media_encoded: {

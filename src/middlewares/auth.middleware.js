@@ -4,6 +4,7 @@ const logger = require('../config/logger');
 const { blogService } = require('../services');
 
 const auth = (required) => async(req, res, next) => {
+  console.log(req.body)
   // If the blog doesn't exist, Spore must be installed
   let blog = await blogService.getBlog();
   if (!blog) {

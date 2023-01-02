@@ -71,6 +71,16 @@ const SporeStore = class SporeStore extends ISporeStore {
     return post;
   }
 
+  async updatePost(id, postDoc) {
+    logger.debug('Updating post to the database: %j', postDoc);
+    await this.db.Posts.update(postDoc, {
+      where: {
+        id: id
+      }
+    });
+    return this.getPostById(id);    
+  }
+
   queryPosts = async(filter, options) => {
     if (!options) {
       options = {};
