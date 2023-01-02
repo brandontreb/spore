@@ -38,6 +38,7 @@ Running locally:
 
 ```bash
 yarn dev
+# Open up http://localhost:3000 in your browser
 ```
 
 Running in production:
