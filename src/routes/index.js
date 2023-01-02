@@ -2,6 +2,7 @@ const express = require('express');
 const indieWebRoutes = require('./indieWeb');
 const adminRoutes = require('./admin.route');
 const blogRoutes = require('./blog.route');
+const fediverseRoutes = require('./fediverse');
 
 const router = express.Router();
 
@@ -13,6 +14,11 @@ const defaultRoutes = [{
   {
     path: '/admin',
     route: adminRoutes,
+    middleware: [],
+  },
+  {
+    path: '/.well-known',
+    route: fediverseRoutes,
     middleware: [],
   },
   // All other paths routed to blog routes
