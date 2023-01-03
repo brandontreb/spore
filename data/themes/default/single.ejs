@@ -11,7 +11,7 @@
     <%- include('partials/header'); %>
   </header>
 
-  <article class="h-entry post-single">
+  <div class="h-entry post-single">
     <!-- Heading -->
     <h2 class="p-name <%- locals.post.type !== 'article' ? 'u-hidden' : '' %>">
       <a href="<%- locals.post.url %>">
@@ -37,9 +37,7 @@
         <p class="e-content">
           <%- locals.post.html %>
           <%- include('partials/media'); %>
-        </p>
-        <!-- Bridgy Fed -->
-        <a class="u-bridgy-fed" href="https://fed.brid.gy/"></a>
+        </p>        
 
         <!-- Tags-->
         <p>
@@ -63,8 +61,9 @@
         <!-- Author h-card -->
         <%- include('partials/author') %>
 
-
-  </article>
+        <!-- Bridgy Fed -->
+        <a class="u-bridgy-fed" href="https://fed.brid.gy/">&nbsp;</a>
+    </div>
   <br><br>
 
   <!-- Footer -->
