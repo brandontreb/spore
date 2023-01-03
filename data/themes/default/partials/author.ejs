@@ -1,6 +1,6 @@
 <!-- h-card for the author -->
 <div class="p-author h-card u-hidden">
-  <a class="p-name u-url" href="<%- blog.url %>">
+  <a rel="me" class="p-name u-url" href="<%- blog.url %>">
     <%- blog.user.display_name || blog.user.acct %>
   </a>
   <img class="u-photo" src="<%- blog.user.avatar || blog.user.gravatar %>" alt="">
