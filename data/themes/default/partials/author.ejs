@@ -3,6 +3,7 @@
   <a rel="me" class="p-name u-url" href="<%- blog.url %>">
     <%- blog.user.display_name || blog.user.acct %>
   </a>
+  <a class="u-url" href="<%- blog.user.acct %>"></a>
   <img class="u-photo" src="<%- blog.user.avatar || blog.user.gravatar %>" alt="">
   <p class="p-note">
     <%- blog.user.note %>
