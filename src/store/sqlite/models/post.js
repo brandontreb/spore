@@ -140,6 +140,9 @@ module.exports = (sequelize, DataTypes) => {
           }
         }
 
+        // Add bridgyfed link 
+        links.push("https://fed.brid.gy/");
+
         return links;
       }
     },

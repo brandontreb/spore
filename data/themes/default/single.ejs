@@ -34,22 +34,24 @@
       <% } %>
 
         <!-- Article -->
-        <div class="e-content">
+        <p class="e-content">
           <%- locals.post.html %>
-            <%- include('partials/media'); %>
-        </div>
+          <%- include('partials/media'); %>
+        </p>
+        <!-- Bridgy Fed -->
+        <a class="u-bridgy-fed" href="https://fed.brid.gy/"></a>
 
         <!-- Tags-->
         <p>
           <% 
             let tags = post.tags && post.tags.length ? post.tags : [];
             tags.forEach(tag => { %>
-            <% if(tag.name.length > 0) { %>
-              <a href="/archive/?q=<%- tag.slug %>">
-                  #<%- tag.name %>
-                </a>&nbsp;
+              <% if(tag.name.length > 0) { %>
+                <a href="/archive/?q=<%- tag.slug %>">
+                    #<%- tag.name %>
+                  </a>&nbsp;
               <% } %>
-                <% }); %>
+            <% }); %>
         </p>
 
         <!-- <span class="separator">
