@@ -87,7 +87,7 @@ const getArchive = catchAsync(async(req, res) => {
           }
         },
         {
-          tags: {
+          tags_csv: {
             [Op.like]: `%${q}%`
           }
         }
