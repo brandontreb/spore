@@ -19,42 +19,39 @@
       </a>
     </h2>
     <a class="u-url" href="<%- locals.post.url %>">
-          <time class="dt-published" datetime="<%- locals.post.published_date.toISOString() %>">
-            <%- locals.post.published_date_formatted("h:mm:ss a, MMM Do YYYY") %>
-          </time>
-        </a>
+      <time class="dt-published" datetime="<%- locals.post.published_date.toISOString() %>">
+        <%- locals.post.published_date_formatted("h:mm:ss a, MMM Do YYYY") %>
+      </time>
+    </a>
 
     <!-- Reply -->
     <% if (post.type === 'reply') { %>
-      <p>in reply to:
+      <div>in reply to:
         <a class="u-in-reply-to" href="<%- post.getMeta('in-reply-to') %>">
           <%- post.getMeta('in-reply-to') %>
         </a>
-      </p>
-      <% } %>
+      </div>
+    <% } %>
 
-        <!-- Article -->
-        <p class="e-content">
-          <%- locals.post.html %>
-          <%- include('partials/media'); %>
-        </p>        
+    <!-- Article -->
+    <div class="e-content">
+      <%- locals.post.html %>
+      <%- include('partials/media'); %>
+    </div>        
 
-        <!-- Tags-->
-        <p>
-          <% 
-            let tags = post.tags && post.tags.length ? post.tags : [];
-            tags.forEach(tag => { %>
-              <% if(tag.name.length > 0) { %>
-                <a href="/archive/?q=<%- tag.slug %>">
-                    #<%- tag.name %>
-                  </a>&nbsp;
-              <% } %>
-            <% }); %>
-        </p>
+    <!-- Tags-->
+    
+    <% 
+      let tags = post.tags && post.tags.length ? post.tags : [];
+      tags.forEach(tag => { %>
+        <% if(tag.name.length > 0) { %>
+          <a href="/archive/?q=<%- tag.slug %>">
+              #<%- tag.name %>
+            </a>&nbsp;
+        <% } %>
+      <% }); %>    
 
-        <!-- <span class="separator">
-            <span class="divider"></span>
-        </span> -->
+        <span class="separator"><span class="divider"></span></span>
         <!-- Conversations-->
         <div id="conversations"></div>
 
