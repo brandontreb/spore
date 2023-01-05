@@ -1,0 +1,10 @@
+<!-- Tags-->  
+<div class="tags">
+  <%
+  let tags = post.tags && post.tags.length ? post.tags : [];
+  tags.forEach(tag => { %>
+  <% if(tag.name) { %>
+  <a href="/archive/?q=<%- tag.slug %>">#<%- tag.name %></a>
+  <% } %>
+  <% }); %>
+</div>
