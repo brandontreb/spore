@@ -92,8 +92,8 @@ ready(async() => {
     </form>
     <div class="clear"></div>
     `
-    // let target = encodeURIComponent(window.location.href);
-    let target = 'https://brandontreb.com/2022/12/29/0y1u9eg2dztanm595sb4jv';
+    let target = encodeURIComponent(window.location.href);
+    // let target = 'https://brandontreb.com/2022/12/29/0y1u9eg2dztanm595sb4jv';
     let url = `https://webmention.io/api/mentions.jf2?target=${target}`
     const response = await fetch(url);
     let data = await response.json();
