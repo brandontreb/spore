@@ -2,6 +2,7 @@ const logger = require('../config/logger');
 const SporeStore = require('../store');
 const { slugify } = require('../utils/utils');
 const mediaService = require('./media.service');
+const utils = require('../utils/utils');
 
 const createPost = async(postDoc) => {
   // handle categories
@@ -34,6 +35,9 @@ const createPost = async(postDoc) => {
   let post = null;
   logger.debug('Saving post to the database: %j', postDoc);
   if(postDoc.id) {
+    // update the post.html from post.content
+    post.html = utils.markdownToHtml(postDoc.content);
+    post.text = utils.markdownToText(postDoc.content);
     post = await SporeStore.updatePost(postDoc.id, postDoc);
   } else {
     post = await SporeStore.createPost(postDoc);

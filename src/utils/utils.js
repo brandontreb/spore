@@ -5,6 +5,7 @@ const md = new MarkdownIt({
   typographer: true
 });
 const HTMLDecoderEncoder = require("html-encoder-decoder");
+const { convert } = require('html-to-text');
 
 const normalizeUrl = (url) => {
   url = url.trim();
@@ -39,10 +40,18 @@ const markdownToHtml = (markdown) => {
   return md.render(decoded);
 };
 
+const markdownToText = (markdown) => {
+  let decoded = convert(markdownToHtml(markdown), {
+    wordwrap: 130
+  });
+  return decoded;;
+};
+
 module.exports = {
   normalizeUrl,
   slugify,
   getGravatar,
   markdownToHtml,
+  markdownToText,
   nakedUrl,
 }
