@@ -15,9 +15,14 @@ ready(async() => {
     var blog_url = document.getElementById("script_conversation").getAttribute("data-blog_url");
 
     var styleEl = document.createElement('style');
-    styleEl.innerHTML = `#conversations img{ 
+    styleEl.innerHTML = `
+    #conversations img{ 
       float: left; 
       margin-right: 10px; 
+      object-fit: cover;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
     }
     #conversations a {
       text-decoration: none;
@@ -25,11 +30,14 @@ ready(async() => {
     }
     #conversations .p-name{ 
       font-weight: bold; 
+    }    
+    #conversations .p-url{
+      font-size: 0.8em;
+      color: #999;
     }
-    #conversations p{ 
+    #conversations .content p{ 
       margin: 0;
-      margin-top: .8em;
-    }
+    }    
     #conversations .date, #conversations .date a{
       font-size: 0.8em;
       color: #999;
@@ -38,7 +46,7 @@ ready(async() => {
       text-transform: none !important;
     }
     #conversations .mention{
-      margin-bottom: 30px;
+      margin-bottom: 2em;
     }
     #conversations .webmention-form label{
       display: block;
@@ -73,22 +81,19 @@ ready(async() => {
     conversationsDiv.innerHTML = `
       <br /><hr />
       <form class="webmention-form" action="https://webmention.io/${blog_url}/webmention" method="post">
-      
         <label>Have you written a <a href="https://indieweb.org/responses">response</a> to this? Let me know the URL:</label>
+        <br />
         <input type="url" name="source" class="url">
         <div>
           <label>&nbsp;</label>
           <input type="submit" class="ui submit button" value="Send Webmention">
         </div>      
-      <div class="status hidden">
-        <div class="ui message"></div>
-      </div>
       <input type="hidden" name="target" value="${window.location.href}">
     </form>
     <div class="clear"></div>
     `
-
-    let target = encodeURIComponent(window.location.href);
+    // let target = encodeURIComponent(window.location.href);
+    let target = 'https://brandontreb.com/2022/12/29/0y1u9eg2dztanm595sb4jv';
     let url = `https://webmention.io/api/mentions.jf2?target=${target}`
     const response = await fetch(url);
     let data = await response.json();
@@ -129,11 +134,12 @@ ready(async() => {
       conversationDiv.className = 'conversation';
       conversationDiv.innerHTML = `
         <div class="mention">
-          <img src="${mention.author.photo}" alt="${mention.author.name}" width="50" height="50" style="max-width: 50px;" />
+          <img src="${mention.author.photo}" alt="${mention.author.name}" />
           <a href="${mention.author.url}">
             <span class="p-name">${mention.author.name}</span>
-          </a>                
-          <span>${mention.content.html || mention.content.text}</span>                
+          </a>
+          <span class="p-url">${mention.author.url}</span>
+          <span class="content p-summary">${mention.content.html || mention.content.text}</span>                
           <div class="date">
             <a href="${mention['wm-source']}">${new Date(mention.published).toDateString()}</a>
           </div>        
