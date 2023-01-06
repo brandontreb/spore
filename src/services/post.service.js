@@ -36,8 +36,8 @@ const createPost = async(postDoc) => {
   logger.debug('Saving post to the database: %j', postDoc);
   if(postDoc.id) {
     // update the post.html from post.content
-    post.html = utils.markdownToHtml(postDoc.content);
-    post.text = utils.markdownToText(postDoc.content);
+    postDoc.html = utils.markdownToHtml(postDoc.content);
+    postDoc.text = utils.markdownToText(postDoc.content);
     post = await SporeStore.updatePost(postDoc.id, postDoc);
   } else {
     post = await SporeStore.createPost(postDoc);
