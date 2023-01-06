@@ -1,6 +1,6 @@
 {
   "apps": [{
-    "name": "app",
+    "name": "spore.blog",
     "script": "src/index.js",
     "instances": 1,
     "autorestart": true,
@@ -8,6 +8,7 @@
     "time": true,
     "env": {
       "NODE_ENV": "development"
-    }
+    },
+    "max_memory_restart": "300M"
   }]
 }
