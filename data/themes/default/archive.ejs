@@ -22,29 +22,24 @@
       <%- include('partials/header'); %>
     </header>
 
+    <h1>Archive</h1>
+    <div class="h-feed blog-posts">      
+      <% locals.posts.forEach(post=> { %>
+        <p class="h-entry">
+          <a class="u-url" href="<%- post.url %>">
+          <time class="dt-published" datetime="<%- post.published_date %>"><%- post.published_date_formatted("MMM Do YYYY h:mm:ss a, ") %></time>
+        </a>
+          <% if(post.type === 'note') { %>
+            <span><%- truncate(post.text, 92) %></span>
+          <% } else { %>
+            <span><b><%- truncate(post.title, 45) %></b> <%- truncate(post.text, 92) %></span>
+          <% } %>
+        </p>
+        <% }); %>
+    </div>
+    <span class="separator"><span class="divider"></span></span>
 
-    <main>
-      <div class="blog-posts">
-        <h1>Archive</h1>
-        <% locals.posts.forEach(post=> { %>
-          <p class="h-entry">
-            <a class="u-url" href="<%- post.url %>">
-            <time class="dt-published" datetime="<%- post.published_date %>"><%- post.published_date_formatted("MMM Do YYYY h:mm:ss a, ") %></time>
-          </a>
-            <% if(post.type === 'note') { %>
-              <span><%- truncate(post.text, 92) %></span>
-            <% } else { %>
-              <span><b><%- truncate(post.title, 45) %></b> <%- truncate(post.text, 92) %></span>
-            <% } %>
-          </p>
-          <% }); %>
-      </div>
-      <span class="separator">
-        <span class="divider"></span>
-      </span>
-    </main>
-
-    <br><br>
+    <%- include('partials/author'); %>
 
     <!-- Footer -->
     <footer>

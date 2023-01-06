@@ -11,15 +11,14 @@
     <%- include('partials/header'); %>
   </header>
 
-  <div class="entries"> 
+  <div class="h-feed entries"> 
     <% posts.forEach(post=> { %>
       <%- include('partials/post-list', {post: post}); %>
     <% }); %>
   </div>
 
-  <a href="/?page=<%- locals.page + 1 %>">Next</a>
-  <%- include('partials/author'); %>
-  <br><br>
+  <%- include('partials/next'); %>
+  <%- include('partials/author'); %>  
 
   <!-- Footer -->
   <footer>

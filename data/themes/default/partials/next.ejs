@@ -1,0 +1,5 @@
+<% if(locals.posts && locals.posts.length === locals.postsPerPage ) { %>
+<div class="next">
+  <a href="/?page=<%- locals.page + 1 %>">Next</a>
+</div>
+<% } %>

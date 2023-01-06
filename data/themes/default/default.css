@@ -1,19 +1,30 @@
 body {
   color: #666;
 }
-
 header {
   background: var(--nc-bg-1);
   border: 0;
   margin-bottom: 0;
-}
+} 
 
 header a {
   color: #333;
   text-decoration: none;
   color: #888;
-  margin-right: 20px;
-  margin-left: 0px;
+  margin-right: 1em;  
+} 
+
+@media only screen and (min-width: 600px) {
+  header .avatar {
+    margin-right: 15px;
+    float: left;
+  }
+}
+
+header .avatar img {
+  object-fit: contain;
+  width: 75px;
+  height: 75px;
 }
 
 .separator {
@@ -28,17 +39,6 @@ span.divider {
   background-color: #ddd;
   height: 1px;
   margin: 0 auto;
-}
-
-.avatar {
-  float: left;
-  margin-right: 20px;
-}
-
-.avatar img {
-  object-fit: contain;
-  width: 75px;
-  height: 75px;
 }
 
 .dt-published {
@@ -56,6 +56,12 @@ footer {
 
 .title {
   text-decoration: none;
+}
+
+.next {
+  width: 100%;
+  text-align: right;
+  margin-bottom: 2rem;
 }
 
 h2.p-name {
@@ -115,4 +121,8 @@ h1 {
 
 .u-hidden {
   display: none;
+}
+
+.u-clear {
+  clear: both;
 }

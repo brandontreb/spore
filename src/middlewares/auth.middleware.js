@@ -1,6 +1,4 @@
 const config = require('../config/config');
-const httpStatus = require('http-status');
-const logger = require('../config/logger');
 const { blogService } = require('../services');
 
 const auth = (required) => async(req, res, next) => {
@@ -25,8 +23,8 @@ const auth = (required) => async(req, res, next) => {
     }
   }
 
-  // Hydrate the locals with the blog/user data
 
+  // TODO: Add a blog config for theme
   let theme = {
     name: 'default',
     slug: 'default',
