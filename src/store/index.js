@@ -244,20 +244,23 @@ const SporeStore = class SporeStore extends ISporeStore {
       let key = meta.key || meta.name;
       let value = meta.value;
 
-      if (typeof value === 'object') {
+      if (typeof value === 'object') {        
         // Single item arrays get squashed
         // Multi item arrays get stored as CSV
-        if (Array.isArray(value)) {
+        if (Array.isArray(value)) {          
           if (value.length > 1) {
             value = JSON.stringify(value);
           } else {
             value = value[0];
+            if (typeof value === 'object') {
+              value = JSON.stringify(value);
+            }
           }
         } else {
           // Objects are stored as JSON
           value = JSON.stringify(value);
         }
-      }
+      }      
       let postMeta = await this.db.Post_Meta.create({
         post_id: postId,
         name: key,
