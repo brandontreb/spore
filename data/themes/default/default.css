@@ -51,6 +51,10 @@ span.divider {
   display: block;
 }
 
+.post-single .h-content {
+  margin-top: 2rem;
+}
+
 footer {
   text-align: center;
 }
