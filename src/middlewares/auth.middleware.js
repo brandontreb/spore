@@ -1,10 +1,22 @@
 const config = require('../config/config');
+const logger = require('../config/logger');
 const { blogService } = require('../services');
 
 const auth = (required) => async(req, res, next) => {
-  console.log(req.body)
-  // If the blog doesn't exist, Spore must be installed
-  let blog = await blogService.getBlog();
+  // The id of the blog is passed in the query string or its the only blog installed (id = 1)
+  // Eventually, we will have multiple blogs per installation and it will be pulled up by subdomain
+  let blogId = req.query.blog_id || 1;  
+
+  // If the user is in the admin, get the blog id from the session
+  // Also, if the user is doing indie auth get the blog id from the session
+  if (req.originalUrl.startsWith('/admin') || req.originalUrl.startsWith('/indieWeb/indieAuth')) {
+    blogId = req.session.blog_id;
+  }
+
+  logger.debug(`Looking up blog with id: ${blogId}`);  
+
+  let blog = await blogService.getBlog(blogId);  
+
   if (!blog) {
     if (req.originalUrl !== '/admin/install') {
       return res.redirect('/admin/install');

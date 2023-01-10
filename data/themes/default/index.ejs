@@ -11,11 +11,17 @@
     <%- include('partials/header'); %>
   </header>
 
-  <div class="h-feed entries"> 
-    <% posts.forEach(post=> { %>
-      <%- include('partials/post-list', {post: post}); %>
-    <% }); %>
-  </div>
+  <% if(locals.blog.homepage_content && locals.blog.homepage_content.length) { %>
+    <div class="homepage-content">
+      <%- locals.blog.homepage_content_html %>
+    </div>
+  <% } else { %>
+    <div class="h-feed entries"> 
+      <% posts.forEach(post=> { %>
+        <%- include('partials/post-list', {post: post}); %>
+      <% }); %>
+    </div>
+  <% } %>
 
   <%- include('partials/next'); %>
   <%- include('partials/author'); %>  

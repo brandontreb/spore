@@ -6,8 +6,8 @@ const pick = require('../utils/pick');
 const SporeStore = require('../store');
 const userService = require('./user.service');
 
-const getBlog = async() => {
-  let blog = await SporeStore.getBlog();
+const getBlog = async(blogId) => {
+  let blog = await SporeStore.getBlog(blogId);
   if (!blog) {
     logger.error('Blog not found');
     return null;
@@ -60,7 +60,7 @@ const updateBlog = async(blog, body) => {
     blogMeta.acct = `${blogMeta.username}@${utils.nakedUrl(blog.url)}`;
   }
 
-  await SporeStore.updateBlog(blogMeta);
+  await SporeStore.updateBlog(blog.id, blogMeta);
 }
 
 const loginWithEmailAndPassword = async(email, password) => {
@@ -68,10 +68,10 @@ const loginWithEmailAndPassword = async(email, password) => {
   let user = await userService.getUserByEmailOrUsername(email);
   if (user) {
     if (passwordHash.verify(password, user.password)) {
-      return true;
+      return user;
     }
   }
-  return false;
+  return user;
 }
 
 module.exports = {

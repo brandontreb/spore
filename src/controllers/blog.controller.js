@@ -1,15 +1,14 @@
 const catchAsync = require('../utils/catchAsync');
 const { postService } = require('../services');
-const logger = require('../config/logger');
 const { Op } = require('sequelize');
+const logger = require('../config/logger');
 
 const index = catchAsync(async(req, res) => {
   let page = res.locals.page;
 
   let posts = await postService.queryPosts({
     blog_id: res.locals.blog.id,
-    status: 'published',
-    // show only notes and articles
+    status: 'published',    
     type: {
       [Op.not]: ['reply']
     }
@@ -32,8 +31,10 @@ const getPost = catchAsync(async(req, res) => {
   let slug = req.params.slug;
   let post = await postService.getPostBySlug(slug);
 
+  logger.debug(`lookup up post with slug ${slug} post: %o`, post);
+
   // If the post is not published, redirect to the blog page
-  if (!post) {
+  if (!post || !post.published_date || post.blog_id !== blog.id) {
     return res.render('pages/404', {
       title: blog.title,
     });
@@ -48,8 +49,7 @@ const getPost = catchAsync(async(req, res) => {
   res.render('pages/single', locals);
 });
 
-const getReplies = catchAsync(async(req, res) => {
-  logger.info('getReplies');
+const getReplies = catchAsync(async(req, res) => {  
   let blog = res.locals.blog;
   let posts = await postService.queryPosts({
     blog_id: blog.id,
@@ -97,6 +97,7 @@ const getArchive = catchAsync(async(req, res) => {
 
   filter = {
     [Op.and]: [{
+        blog_id: blog.id,
         status: 'published',
         type: {
           [Op.notIn]: ['page', 'reply']

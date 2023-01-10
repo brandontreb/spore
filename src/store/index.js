@@ -356,9 +356,12 @@ const SporeStore = class SporeStore extends ISporeStore {
   /**
    * Blog Methods
    */
-  getBlog = async(include = ['user']) => {
+  getBlog = async(blogId = 1, include = ['user']) => {
     try {
       let blog = await this.db.Blogs.findOne({
+        where: {
+          id: blogId
+        },        
         order: [
           ['id', 'DESC']
         ],
@@ -378,8 +381,8 @@ const SporeStore = class SporeStore extends ISporeStore {
     return await this.getBlog();
   }
 
-  updateBlog = async(body) => {
-    let blog = await this.getBlog();
+  updateBlog = async(id, body) => {
+    let blog = await this.getBlog(id);
     blog = await blog.update(body);
     return blog;
   }

@@ -53,6 +53,7 @@ const generateIndieAuthTokens = async(
     me: blog.url,
     scope,
     client_id,
+    blog_id: blog.id,
     expires_at: accessTokenExpires.toDate(),
     type: tokenTypes.ACCESS
   };

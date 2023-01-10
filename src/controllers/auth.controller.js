@@ -4,7 +4,6 @@ const { blogService } = require('../services');
 const logger = require('../config/logger');
 
 const getLogin = catchAsync(async(req, res) => {
-
   if (req.query.redirect) {
     req.session.redirect = req.query.redirect;
   }
@@ -18,19 +17,25 @@ const loginWithEmailAndPassword = catchAsync(async(req, res, next) => {
   const { email, password } = req.body;
   const authenticated = await blogService.loginWithEmailAndPassword(email, password);
 
+  logger.debug('Authenticated: %j', authenticated);
+
   if (authenticated || config.dev) {
     req.session.isLoggedIn = true;
+    req.session.blog_id = authenticated.blog_id;
     req.session.save(err => {
       if (err) {
-        console.error(err);
+        logger.error(err);
         return next(err);
       }
+
+      logger.debug('Initialized session %j', req.session);
+
       if (req.session.redirect) {
         let redirect = req.session.redirect;
         redirect = decodeURIComponent(redirect);
         delete req.session.redirect;
         return res.redirect(redirect);
-      }
+      }      
 
       return res.redirect('/admin');
     });

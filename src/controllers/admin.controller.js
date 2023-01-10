@@ -13,6 +13,7 @@ const getAdmin = catchAsync(async(req, res) => {
 
 const updateBlog = catchAsync(async(req, res) => {
   let blog = res.locals.blog;
+  logger.debug(`Updating blog ${blog.id} with %j`, req.body);
   await blogService.updateBlog(blog, req.body);
   req.flash('success', 'Blog updated successfully');
   res.redirect('/admin');
@@ -79,9 +80,17 @@ const getPosts = catchAsync(async(req, res) => {
 const getPost = catchAsync(async(req, res) => {
   let blog = res.locals.blog;
   let post = await postService.getPostById(req.params.postId);
+
+  // Ensure that the post exists
   if (!post) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
   }
+
+  // Ensure that the post belongs to the blog
+  if (post.blog_id !== blog.id) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
+  }
+
   res.render('admin/pages/post', {
     admin_title: 'Post',
     post: post,
@@ -93,7 +102,14 @@ const updatePost = catchAsync(async(req, res) => {
   let blog = res.locals.blog;
   let type = req.body.title && req.body.title.length > 0 ? 'article' : 'note';
   let post = await postService.getPostById(req.params.postId);
+
+  // Ensure that the post exists
   if (!post) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
+  }
+
+  // Ensure that the post belongs to the blog
+  if (post.blog_id !== blog.id) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
   }
 
@@ -113,9 +129,17 @@ const updatePost = catchAsync(async(req, res) => {
 const deletePost = catchAsync(async(req, res) => {
   let blog = res.locals.blog;
   let post = await postService.getPostById(req.params.postId);
+  
+  // Ensure that the post exists
   if (!post) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
   }
+
+  // Ensure that the post belongs to the blog
+  if (post.blog_id !== blog.id) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
+  }
+
   await postService.deletePost(post.id);
   req.flash('success', 'Post deleted successfully');
   res.redirect('/admin/posts');

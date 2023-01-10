@@ -1,6 +1,6 @@
 const uniquid = require('uniqid');
 const utils = require('../../utils/utils');
-const { tokenService, oauth2Service } = require('../../services');
+const { tokenService, oauth2Service, blogService } = require('../../services');
 const SporeStore = require('../../store');
 const logger = require('../../config/logger');
 
@@ -64,8 +64,6 @@ const approve = async(req, res) => {
 
 const token = async(req, res) => {
 
-  let blog = res.locals.blog;
-
   // Check for custom actions
   if (req.body.action && req.body.action === 'revoke') {
     // let { token } = req.body;
@@ -126,6 +124,7 @@ const token = async(req, res) => {
     });
   }
 
+  let blog = await blogService.getBlog(indieAuthRequest.blog_id);
   let scope = indieAuthRequest.scope;
   let clientId = indieAuthRequest.client_id;
   let indieAuthRequestId = indieAuthRequest.id;

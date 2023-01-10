@@ -22,7 +22,11 @@ if (config.env !== 'test') {
 }
 
 // set security HTTP headers
-// app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+  crossOriginEmbedderPolicy: false,
+  contentSecurityPolicy: false,
+}));
 
 // parse json request body
 app.use(express.json());
@@ -35,7 +39,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'))
 
 // Session configuration
-// TODO: Move to config file
 app.set('trust proxy', 1)
 app.use(session({
   key: 'spore.blog.session',
@@ -90,9 +93,10 @@ app.use('/api/v1', apiRoutes);
 app.use('/v1', apiRoutes);
 app.use('/', routes);
 
-// send back a 404 error for any unknown api request
+// send back a 404 error for any unknown request
 app.use((req, res, next) => {
-  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
+  // Render the 404 page
+  res.status(404).render('pages/404', { title: '404' });
 });
 
 // convert error to ApiError, if needed

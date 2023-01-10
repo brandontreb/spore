@@ -5,6 +5,7 @@ const { Op } = require('sequelize');
 const xml = catchAsync(async(req, res) => {
   const blog = res.locals.blog;
   const posts = await postService.queryPosts({
+    blog_id: blog.id,
     status: 'published',
     type: {
       [Op.notIn]: ['page', 'reply']
@@ -30,7 +31,8 @@ const xml = catchAsync(async(req, res) => {
 const json = catchAsync(async(req, res) => {
   const blog = res.locals.blog;
   const posts = await postService.queryPosts({
-    status: 'published',
+    blog_id: blog.id,
+    status: 'published',    
     type: {
       [Op.notIn]: ['page', 'reply']
     },

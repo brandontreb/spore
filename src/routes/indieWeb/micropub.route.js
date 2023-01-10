@@ -1,6 +1,6 @@
 const express = require('express');
 const { micropubController } = require('../../controllers/indieWeb');
-const indieAuth = require('../../middlewares/indieAuth');
+const indieAuth = require('../../middlewares/indieAuth.middleware');
 const upload = require('../../middlewares/upload.middleware');
 const auth = require('../../middlewares/auth.middleware');
 

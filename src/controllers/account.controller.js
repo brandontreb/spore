@@ -12,6 +12,13 @@ const updateAccount = catchAsync(async(req, res) => {
   let user = res.locals.blog.user;
   let blog = res.locals.blog;
 
+  // Ensure the user owns the blog
+  if(user.blog_id !== blog.id) {
+    req.flash('error', 'You do not have permission to edit this blog');
+    res.redirect('/admin/account');
+    return; 
+  }
+
   if (body.password && body.password !== body.password_again) {
     req.flash('error', 'Passwords do not match');
     res.redirect('/admin/account');
@@ -40,6 +47,15 @@ const getPhoto = catchAsync(async(req, res) => {
 
 const updatePhoto = catchAsync(async(req, res) => {
   let user = res.locals.blog.user;
+  let blog = res.locals.blog;
+
+  // Ensure the user owns the blog
+  if(user.blog_id !== blog.id) {
+    req.flash('error', 'You do not have permission to edit this blog');
+    res.redirect('/admin/account');
+    return;
+  }
+
   await userService.updateUser(user.id, {
     avatar: req.file.path
   });
@@ -49,6 +65,15 @@ const updatePhoto = catchAsync(async(req, res) => {
 
 const deletePhoto = catchAsync(async(req, res) => {
   let user = res.locals.blog.user;
+  let blog = res.locals.blog;
+
+  // Ensure the user owns the blog
+  if(user.blog_id !== blog.id) {
+    req.flash('error', 'You do not have permission to edit this blog');
+    res.redirect('/admin/account');
+    return;
+  }
+  
   await userService.updateUser(user.id, {
     avatar: ''
   });

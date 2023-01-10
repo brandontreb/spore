@@ -4,8 +4,6 @@ const logger = require('../config/logger');
 let { tokenService, blogService } = require('../services');
 
 const apiAuth = (scopes = 'create') => async(req, res, next) => {
-  let blog = await blogService.getBlog();
-
   // Check for a Bearer Token in headers
   let token = req.headers.authorization;
   if (!token) {
@@ -25,6 +23,8 @@ const apiAuth = (scopes = 'create') => async(req, res, next) => {
   try {
     const tokenDoc = await tokenService.verifyToken(token);
 
+    logger.debug('token: %o', tokenDoc);
+
     // Check the me value against blog.url
     const me = tokenDoc.me;
     if (!me) {
@@ -33,6 +33,10 @@ const apiAuth = (scopes = 'create') => async(req, res, next) => {
         error_description: 'me+parameter+absent'
       });
     }
+
+    // Lookup the blog from the token
+    let blog = await blogService.getBlog(tokenDoc.blog_id);
+    res.locals.blog = blog;
 
     if (me !== blog.url) {
       return res.status(401).json({
